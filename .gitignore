@@ -1,0 +1,6 @@
+moc_*
+*.o
+*.deb
+debian
+HackfestDemo*
+Makefile
