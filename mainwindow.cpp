@@ -66,8 +66,9 @@ MainWindow::MainWindow()
 
     setCentralWidget(glwidget);
 
-    synth_init();
-    synth_play();
+    // Play music
+    //synth_init();
+    //synth_play();
 
     QObject::connect(timer, SIGNAL(timeout()), glwidget, SLOT(updateGL()));
     timer->start();
