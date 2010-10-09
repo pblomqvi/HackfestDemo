@@ -44,8 +44,11 @@
 #include <QGLWidget>
 #include <QTime>
 #include <QMouseEvent>
+#include <QtOpenGL>
 
 class Entity;
+struct FBO;
+
 class DemoGLWidget : public QGLWidget {
 
     Q_OBJECT
@@ -66,5 +69,10 @@ private:
     int frames;
     QTime time;
     QPointF targetLocation;
+
+    FBO* fbo;
+    QGLShaderProgram program;
+    QGLFramebufferObject *render_fbo;
+    QGLFramebufferObject *texture_fbo;
 };
 #endif
