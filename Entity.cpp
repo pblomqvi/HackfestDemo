@@ -1,6 +1,7 @@
 #include "Entity.h"
 #include "config.h"
 #include "Utils.h"
+#include "synth.h"
 
 #include <QPainter>
 #include <QPen>
@@ -70,7 +71,8 @@ void Entity::drawEntity(QPainter *painter)
 
     painter->save();
     painter->translate(position.x() - radius, position.y() - radius);
-    painter->setOpacity(0.8);
+    //painter->setOpacity(0.8);
+    painter->setOpacity(synth_get_current_envelope_for_instrument(0));
     painter->drawImage(0, 0, *cache);
     painter->restore();
 }
