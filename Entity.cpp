@@ -7,9 +7,9 @@
 #include <QPen>
 #include <math.h>
 
-Entity::Entity(const QPointF &position, qreal radius, qreal velocity, TurningMode tMode)
-    : position(position), vel(velocity), radius(radius), turningMode(tMode),
-    tail(position, 7, radius / 1.2, 1.0)
+Entity::Entity(const QPointF &position, qreal radius, qreal velocity)
+    : position(position), vel(velocity), radius(radius),
+    tail(position, 0, 7, radius / 1.2, 1.0)
 {
     steeringVector = QVector2D();
     prevSteeringVector = QVector2D();
@@ -113,7 +113,7 @@ void Entity::steerWithFlock(QMutableListIterator<Entity*> localFlock,
         if(flockMate == this) continue; // Ignore self
         QVector2D toSelf = QVector2D(position - flockMate->position);
         qreal distance = toSelf.length();
-        toSelf /= (distance * distance * STEER_SEPARATION_DISTANCE_PENALTA_MULTIPLIES);
+        toSelf /= (distance * distance * STEER_SEPARATION_DISTANCE_PENALTY_MULTIPLIES);
         separationVector += toSelf;
 
         // Calculate cohesion center
@@ -136,37 +136,28 @@ void Entity::steerWithFlock(QMutableListIterator<Entity*> localFlock,
 
 void Entity::move()
 {
-    if(turningMode == Smooth)
-    {
-        // Directions angle from World-Y axis
-        double dirAngle   = Utils::VectorToAngle(directionVector);
-        double steerAngle = Utils::VectorToAngle(steeringVector);
+    // Directions angle from World-Y axis
+    double dirAngle   = Utils::VectorToAngle(directionVector);
+    double steerAngle = Utils::VectorToAngle(steeringVector);
 
-        // Steering angle relative to direction
-        if(steerAngle - dirAngle > 0)
-        {
-            // We turn right, calculate new direction (relative to World Y)
-            directionVector = Utils::AngleToVector(dirAngle + ENTITY_ANGULAR_TURN_SPEED);
-        }
-        else
-        {
-            // We turn left, calculate new direction (relative to World Y)
-            directionVector = Utils::AngleToVector(dirAngle - ENTITY_ANGULAR_TURN_SPEED);
-        }
-
-        // Go to new position
-        position += directionVector.toPointF() * vel;
-    }
-    else // Instant (Default)
+    // Steering angle relative to direction
+    if(steerAngle - dirAngle > 0)
     {
-        steeringVector += prevSteeringVector;
-        steeringVector.normalize();
-        position += steeringVector.toPointF() * vel;
+        // We turn right, calculate new direction (relative to World Y)
+        directionVector = Utils::AngleToVector(dirAngle + ENTITY_ANGULAR_TURN_SPEED);
     }
+    else
+    {
+        // We turn left, calculate new direction (relative to World Y)
+        directionVector = Utils::AngleToVector(dirAngle - ENTITY_ANGULAR_TURN_SPEED);
+    }
+
+    // Go to new position
+    position += directionVector.toPointF() * vel;
 
     // Move tail as well
     tail.move(position);
 
-    //if(DEBUG) Utils::DrawLine(position, position + 10*steeringVector.toPointF());
+    if(DEBUG) Utils::DrawLine(position, position + 30*steeringVector.toPointF());
 
 }

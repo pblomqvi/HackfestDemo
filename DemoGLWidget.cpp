@@ -6,6 +6,7 @@
 #include "config.h"
 #include "Utils.h"
 #include "Entity.h"
+#include "critter.h"
 
 #define WIDTH 512
 #define HEIGHT 512
@@ -133,10 +134,12 @@ void DemoGLWidget::paintGL()
 
     painter.endNativePainting();
 
+    // Draw Entities and Critter
     foreach (Entity *entity, entities)
     {
-            entity->drawEntity(&painter);
+        entity->drawEntity(&painter);
     }
+    critter->drawCritter(&painter);
 
     // Display FPS
     QString framesPerSecond;
@@ -144,9 +147,14 @@ void DemoGLWidget::paintGL()
     painter.setPen(Qt::white);
     painter.drawText(20, 40, framesPerSecond + " fps");
 
+    // Update critter location
+    critter->clearSteering();
+    critter->steerForWander(STEER_WANDER_STRENGTH);
+    bool reached = critter->steerToTarget(targetLocation, STEER_TO_TARGET_STRENGTH);
+    critter->move();
+    if(reached) randomTarget();
 
-
-    bool targetReached = false;
+    // Move entities
     for(int i = 0; i < entities.size(); i++)
     {
         Entity *entity = entities[i];
@@ -155,22 +163,10 @@ void DemoGLWidget::paintGL()
         QMutableListIterator<Entity*> localFlock(entities);
 
         entity->clearSteering();
-        bool reached = entity->steerToTarget(targetLocation, STEER_TO_TARGET_STRENGTH);
+        entity->steerToTarget(critter->pos(), STEER_TO_TARGET_STRENGTH);
         entity->steerWithFlock(localFlock, STEER_SEPARATION_STRENGTH, STEER_COHESION_STRENGTH);
         entity->move();
-
-        if(reached && !targetReached) targetReached = true;
-
     }
-
-    if(targetReached) randomTarget();
-
-    if (!(frames % 100)) {
-        time.start();
-        frames = 0;
-    }
-    frames ++;
-
 
     // Post processing
     /*
@@ -195,6 +191,11 @@ void DemoGLWidget::paintGL()
 
     swapBuffers();
     painter.end();
+    if (!(frames % 100)) {
+        time.start();
+        frames = 0;
+    }
+    frames ++;
 }
 
 void DemoGLWidget::createEntities(int number)
@@ -205,8 +206,10 @@ void DemoGLWidget::createEntities(int number)
         qreal radius = qMin(width(), height())*(0.0175 + 0.0875*qrand()/(RAND_MAX+1.0));
         qreal velocity = ENTITY_SPEED;
 
-        entities.append(new Entity(position, radius, velocity, Smooth));
+        entities.append(new Entity(position, radius, velocity));
     }
+
+    critter = new Critter(QPointF(500,200), 10, CRITTER_SPEED);
 }
 
 void DemoGLWidget::randomTarget()

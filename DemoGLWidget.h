@@ -48,6 +48,7 @@
 
 class Entity;
 struct FBO;
+class Critter;
 
 class DemoGLWidget : public QGLWidget {
 
@@ -65,6 +66,7 @@ private:
 
 
     QList<Entity*> entities;
+    Critter* critter;
 
     int frames;
     QTime time;

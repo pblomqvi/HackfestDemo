@@ -13,6 +13,7 @@ INCLUDEPATH += .
 SOURCES += main.cpp \
     Entity.cpp \
     Utils.cpp \
+    critter.cpp \
     tail.cpp \
     synth.c
 SOURCES += mainwindow.cpp
@@ -23,6 +24,7 @@ HEADERS += Entity.h \
     config.h \
     Utils.h \
     tail.h \
+    critter.h \
     synth.h \
     song.h
 HEADERS += mainwindow.h

@@ -49,11 +49,7 @@
 #include <QTimer>
 
 #include "DemoGLWidget.h"
-
-extern "C"
-{
-    #include "synth.h"
-}
+#include "synth.h"
 
 MainWindow::MainWindow()
 {
