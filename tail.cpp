@@ -18,6 +18,7 @@ Tail::Tail(const QPointF& pos, qreal angle, int numSegments, qreal startRadius, 
     qreal radius = startRadius - radiusDiminish;
     nextSegmentPos += (startOffsetDirection * (startRadius + radius));
     TailSegment* prevSegment = &segments[0];
+    tailLength = 2*startRadius;
 
 
     // Add rest of the segments
@@ -25,19 +26,20 @@ Tail::Tail(const QPointF& pos, qreal angle, int numSegments, qreal startRadius, 
     {
         segments.append(TailSegment(nextSegmentPos.toPointF(), radius, prevSegment));
         numSegments--;
+        tailLength += 2*radius;
         qreal newRadius = radius - radiusDiminish;
         nextSegmentPos += (startOffsetDirection * (radius + newRadius));
         radius = newRadius;
-        prevSegment = &segments[i];    // TODO: PITÄSKÖ OLLA i-1???
-        if(radius <= 0) break; // Stop when radius gets too small
+        prevSegment = &segments[i];
+        if(radius < 1) break; // Stop when radius gets too small
     }
 }
 
-void Tail::drawTail(QPainter *painter)
+void Tail::drawTail(QPainter *painter, QBrush* brush)
 {
     for(int i = 0; i < segments.size(); i++)
     {
-        segments[i].drawSegment(painter);
+        segments[i].drawSegment(painter, brush);
     }
 }
 
@@ -53,14 +55,27 @@ void Tail::move(QPointF newPos)
     }
 }
 
+qreal Tail::length()
+{
+    return tailLength;
+}
+
 Tail::TailSegment::TailSegment(QPointF newPos, qreal newRadius, TailSegment* prev)
     :pos(newPos), radius(newRadius), prevSegment(prev)
 {
 }
 
-void Tail::TailSegment::drawSegment(QPainter* painter)
+void Tail::TailSegment::drawSegment(QPainter* painter, QBrush* brush)
 {
-    Utils::DrawCircle(pos, radius);
+    if(brush)
+    {
+        Utils::DrawCircle(pos, radius, *brush);
+    }
+    else
+    {
+        Utils::DrawCircle(pos, radius);
+    }
+
 }
 
 void Tail::TailSegment::moveSegment()
@@ -130,5 +145,4 @@ void Tentacle::setTentacleAngle(qreal targetAngle)
 {
     tentacleAngle = targetAngle;
     tentacleTargetDir = Utils::AngleToVector(tentacleAngle);
-
 }

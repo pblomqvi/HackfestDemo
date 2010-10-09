@@ -10,8 +10,9 @@ class Tail
 {
 public:
     Tail(const QPointF& pos, qreal angle, int numSegments, qreal startRadius, qreal radiusDiminish);
-    void drawTail(QPainter *painter);
+    void drawTail(QPainter *painter, QBrush* brush = 0);
     void move(QPointF newPos);
+    qreal length();
 
 protected:
 
@@ -19,7 +20,7 @@ protected:
     {
     public:
         TailSegment(QPointF newPos, qreal newRadius, TailSegment* prev);
-        void drawSegment(QPainter* painter);
+        void drawSegment(QPainter* painter, QBrush* brush);
         void moveSegment();
         void moveSegment(QVector2D targetDirection);
 
@@ -31,6 +32,7 @@ protected:
     };
 
     QList<TailSegment> segments;
+    qreal tailLength;
 };
 
 class Tentacle : public Tail

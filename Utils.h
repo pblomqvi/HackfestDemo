@@ -3,6 +3,7 @@
 
 #include <QPointF>
 #include <QPainter>
+#include <QBrush>
 
 struct FBO {
         unsigned int frame, depth, texid;
@@ -17,6 +18,9 @@ public:
 
     static void DrawLine(QPointF from, QPointF to);
     static void DrawCircle(QPointF pos, qreal radius);
+    static void DrawCircle(QPointF pos, qreal radius, QBrush brush);
+
+    static QColor randomColor();
 
     static void InitFBO(FBO *fbo);
     static void DeleteFBO(FBO *fbo);
