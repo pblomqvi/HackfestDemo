@@ -13,8 +13,9 @@ INCLUDEPATH += .
 SOURCES += main.cpp \
     Entity.cpp \
     Utils.cpp \
+    critter.cpp \
     tail.cpp \
-    critter.cpp
+    synth.c
 SOURCES += mainwindow.cpp
 SOURCES += DemoGLWidget.cpp
 
@@ -23,10 +24,13 @@ HEADERS += Entity.h \
     config.h \
     Utils.h \
     tail.h \
-    critter.h
+    critter.h \
+    synth.h \
+    song.h
 HEADERS += mainwindow.h
 
 QT += opengl
+LIBS += -lSDL_mixer
 
 # install
 #target.path = $$[QT_INSTALL_EXAMPLES]/opengl/hellogl_es2

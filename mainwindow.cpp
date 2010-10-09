@@ -50,6 +50,11 @@
 
 #include "DemoGLWidget.h"
 
+extern "C"
+{
+    #include "synth.h"
+}
+
 MainWindow::MainWindow()
 {
     DemoGLWidget *glwidget = new DemoGLWidget();
@@ -60,6 +65,9 @@ MainWindow::MainWindow()
     label->setAlignment(Qt::AlignHCenter);
 
     setCentralWidget(glwidget);
+
+    //synth_init();
+    //synth_play();
 
     QObject::connect(timer, SIGNAL(timeout()), glwidget, SLOT(updateGL()));
     timer->start();
