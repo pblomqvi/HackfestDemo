@@ -69,8 +69,9 @@ void DemoGLWidget::paintGL()
     critter->clearSteering();
     critter->steerForWander(STEER_WANDER_STRENGTH);
     bool reached = critter->steerToTarget(targetLocation, STEER_TO_TARGET_STRENGTH);
-    critter->move();
     if(reached) randomTarget();
+    critter->move();
+    critter->updateColor();
 
     // Move entities
     for(int i = 0; i < entities.size(); i++)
@@ -123,5 +124,7 @@ void DemoGLWidget::mouseMoveEvent (QMouseEvent* event)
 {
     targetLocation = QPointF(event->x(), event->y());
     event->accept();
+
+    critter->setExpandingColor(Utils::randomColor());
 }
 

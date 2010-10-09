@@ -9,6 +9,7 @@
 #include <QRect>
 #include <QRectF>
 #include <QVector2D>
+#include <QRadialGradient>
 
 #include "tail.h"
 
@@ -30,10 +31,12 @@ public:
     void clearSteering();
     void steerForWander(qreal strength);
     bool steerToTarget(QPointF target, qreal strength);
-
     void move();
 
     QPointF pos();
+
+    void setExpandingColor(QColor newColor);
+    void updateColor();
 
 private:
     QColor randomColor();
@@ -48,6 +51,9 @@ private:
     QColor innerColor;
     QColor outerColor;
     QImage *cache;
+
+    QRadialGradient gradient;
+    QBrush gradientBrush;
 
     QList<Tentacle> tails;
     int wanderCounter;

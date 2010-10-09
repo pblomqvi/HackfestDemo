@@ -3,6 +3,7 @@
 
 #include <QPointF>
 #include <QPainter>
+#include <QBrush>
 
 class Utils
 {
@@ -12,6 +13,9 @@ public:
 
     static void DrawLine(QPointF from, QPointF to);
     static void DrawCircle(QPointF pos, qreal radius);
+    static void DrawCircle(QPointF pos, qreal radius, QBrush brush);
+
+    static QColor randomColor();
 
     // Angle in degrees from positive Y-axis in range [-180, 180]
     static qreal VectorToAngle(QVector2D vec);

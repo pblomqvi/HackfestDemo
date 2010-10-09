@@ -15,8 +15,8 @@ Entity::Entity(const QPointF &position, qreal radius, qreal velocity)
     prevSteeringVector = QVector2D();
     directionVector = QVector2D(0.0, 1.0); // Default direction is towards World Y
 
-    innerColor = randomColor();
-    outerColor = randomColor();
+    innerColor = Utils::randomColor();
+    outerColor = Utils::randomColor();
     cache = 0;
     updateBrush();
 }
@@ -25,16 +25,6 @@ Entity::~Entity()
 {
     if (cache)
         delete cache;
-}
-
-QColor Entity::randomColor()
-{
-    int red = int(185 + 70.0*qrand()/(RAND_MAX+1.0));
-    int green = int(185 + 70.0*qrand()/(RAND_MAX+1.0));
-    int blue = int(205 + 50.0*qrand()/(RAND_MAX+1.0));
-    int alpha = int(91 + 100.0*qrand()/(RAND_MAX+1.0));
-
-    return QColor(red, green, blue, alpha);
 }
 
 void Entity::updateCache()

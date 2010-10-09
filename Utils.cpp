@@ -35,6 +35,24 @@ void Utils::DrawCircle(QPointF pos, qreal radius)
     painter->endNativePainting();
 }
 
+void Utils::DrawCircle(QPointF pos, qreal radius, QBrush brush)
+{
+    painter->beginNativePainting();
+    painter->setBrush(brush);
+    painter->drawEllipse(pos, radius, radius);
+    painter->endNativePainting();
+}
+
+QColor Utils::randomColor()
+{
+    int red = int(185 + 70.0*qrand()/(RAND_MAX+1.0));
+    int green = int(185 + 70.0*qrand()/(RAND_MAX+1.0));
+    int blue = int(205 + 50.0*qrand()/(RAND_MAX+1.0));
+    int alpha = int(91 + 100.0*qrand()/(RAND_MAX+1.0));
+
+    return QColor(red, green, blue, alpha);
+}
+
 // Angle in degrees from positive Y-axis in range [-180, 180]
 qreal Utils::VectorToAngle(QVector2D vec)
 {

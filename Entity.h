@@ -34,7 +34,6 @@ public:
     void move();
 
 private:
-    QColor randomColor();
 
     QBrush brush;
     QPointF position;
