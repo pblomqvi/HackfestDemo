@@ -1,5 +1,5 @@
-#ifndef ENTITY_H
-#define ENTITY_H
+#ifndef CRITTER_H
+#define CRITTER_H
 
 // Repserenset single entity which can work as particle emitter
 
@@ -14,24 +14,26 @@
 
 class QPainter;
 
-class Entity
+
+
+class Critter
 {
 public:
-    Entity(const QPointF &position, qreal radius, const qreal velocity);
-    ~Entity();
+    Critter(const QPointF &position, qreal radius, const qreal velocity);
+    ~Critter();
 
-    void drawEntity(QPainter *painter);
+    void drawCritter(QPainter *painter);
 
     void updateBrush();
     void updateCache();
 
     void clearSteering();
-    bool steerToTarget(QPointF target, qreal strength); // Returns true if target reached
-    void steerWithFlock(QMutableListIterator<Entity*> localFlock,
-                        qreal separationStrength,
-                        qreal cohesionStrength);
+    void steerForWander(qreal strength);
+    bool steerToTarget(QPointF target, qreal strength);
 
     void move();
+
+    QPointF pos();
 
 private:
     QColor randomColor();
@@ -47,8 +49,10 @@ private:
     QColor outerColor;
     QImage *cache;
 
-    Tail tail;
-
+    QList<Tentacle> tails;
+    int wanderCounter;
+    bool wanderLeft;
 };
 
-#endif // ENTITY_H
+
+#endif // CRITTER_H

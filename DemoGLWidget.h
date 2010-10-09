@@ -46,6 +46,8 @@
 #include <QMouseEvent>
 
 class Entity;
+class Critter;
+
 class DemoGLWidget : public QGLWidget {
 
     Q_OBJECT
@@ -62,6 +64,7 @@ private:
 
 
     QList<Entity*> entities;
+    Critter* critter;
 
     int frames;
     QTime time;

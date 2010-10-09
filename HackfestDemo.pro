@@ -13,7 +13,8 @@ INCLUDEPATH += .
 SOURCES += main.cpp \
     Entity.cpp \
     Utils.cpp \
-    tail.cpp
+    tail.cpp \
+    critter.cpp
 SOURCES += mainwindow.cpp
 SOURCES += DemoGLWidget.cpp
 
@@ -21,7 +22,8 @@ HEADERS += Entity.h \
     DemoGLWidget.h \
     config.h \
     Utils.h \
-    tail.h
+    tail.h \
+    critter.h
 HEADERS += mainwindow.h
 
 QT += opengl
