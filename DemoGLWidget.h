@@ -38,39 +38,33 @@
 **
 ****************************************************************************/
 
-#ifndef BUBBLE_H
-#define BUBBLE_H
+#ifndef DEMOGLWIDGET_H
+#define DEMOGLWIDGET_H
 
-#include <QBrush>
-#include <QColor>
-#include <QPointF>
-#include <QRect>
-#include <QRectF>
+#include <QGLWidget>
+#include <QTime>
+#include <QMouseEvent>
 
-class QPainter;
+class Entity;
+class DemoGLWidget : public QGLWidget {
 
-class Bubble
-{
+    Q_OBJECT
 public:
-    Bubble(const QPointF &position, qreal radius, const QPointF &velocity);
-    ~Bubble();
-
-    void drawBubble(QPainter *painter);
-    void updateBrush();
-    void move(const QRect &bbox);
-    void updateCache();
-    QRectF rect();
-
+    DemoGLWidget(QWidget *parent = 0);
+    ~DemoGLWidget();
+protected:
+    void paintGL ();
+    void initializeGL ();
+    void mouseMoveEvent (QMouseEvent* event);
 private:
-    QColor randomColor();
+    void createEntities(int number);
+    void randomTarget();
 
-    QBrush brush;
-    QPointF position;
-    QPointF vel;
-    qreal radius;
-    QColor innerColor;
-    QColor outerColor;
-    QImage *cache;
+
+    QList<Entity*> entities;
+
+    int frames;
+    QTime time;
+    QPointF targetLocation;
 };
-
 #endif

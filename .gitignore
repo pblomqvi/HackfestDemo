@@ -4,3 +4,4 @@ moc_*
 debian
 HackfestDemo*
 Makefile
+qrc_texture.cpp

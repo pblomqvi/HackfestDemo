@@ -42,9 +42,31 @@
 #include <QMainWindow>
 #include "mainwindow.h"
 
+#include "Utils.h"
+#include <QVector2D>
+
 int main( int argc, char ** argv )
 {
-    Q_INIT_RESOURCE(texture);
+
+    // Vector tests
+    QVector2D vec;
+
+    printf("UpRight: %f\n", Utils::VectorToAngle(QVector2D(1,1)));
+    printf("DownRight: %f\n", Utils::VectorToAngle(QVector2D(1,-1)));
+    printf("UpLeft: %f\n", Utils::VectorToAngle(QVector2D(-1,1)));
+    printf("DownLeft: %f\n", Utils::VectorToAngle(QVector2D(-1,-1)));
+
+    vec = Utils::AngleToVector(45);
+    printf("UpRight: (%.2f,%.2f)\n", vec.x(), vec.y());
+    vec = Utils::AngleToVector(135);
+    printf("DownRight: (%.2f,%.2f)\n", vec.x(), vec.y());
+    vec = Utils::AngleToVector(-45);
+    printf("UpLeft: (%.2f,%.2f)\n", vec.x(), vec.y());
+    vec = Utils::AngleToVector(-135);
+    printf("DownLeft: (%.2f,%.2f)\n", vec.x(), vec.y());
+
+
+
     QApplication a( argc, argv );
     MainWindow mw;
     mw.showMaximized();

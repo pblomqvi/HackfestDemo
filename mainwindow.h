@@ -43,8 +43,7 @@
 
 #include <QMainWindow>
 
-class QSlider;
-class GLWidget;
+class DemoGLWidget;
 
 class MainWindow : public QMainWindow
 {

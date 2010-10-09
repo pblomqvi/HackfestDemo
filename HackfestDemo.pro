@@ -10,16 +10,20 @@ DEPENDPATH += .
 INCLUDEPATH += .
 
 # Input
-SOURCES += main.cpp
-SOURCES += glwidget.cpp
+SOURCES += main.cpp \
+    Entity.cpp \
+    Utils.cpp \
+    tail.cpp
 SOURCES += mainwindow.cpp
-SOURCES += bubble.cpp
+SOURCES += DemoGLWidget.cpp
 
-HEADERS += glwidget.h
+HEADERS += Entity.h \
+    DemoGLWidget.h \
+    config.h \
+    Utils.h \
+    tail.h
 HEADERS += mainwindow.h
-HEADERS += bubble.h
 
-RESOURCES += texture.qrc
 QT += opengl
 
 # install
