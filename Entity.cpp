@@ -6,6 +6,7 @@
 #include <QPainter>
 #include <QPen>
 #include <math.h>
+#include <QQuaternion>
 
 Entity::Entity(const QPointF &position, qreal radius, qreal velocity)
     : position(position), vel(velocity), radius(radius),
@@ -143,7 +144,7 @@ void Entity::move()
     double steerAngle = Utils::VectorToAngle(steeringVector);
 
     // Steering angle relative to direction
-    if(steerAngle - dirAngle > 0)
+    /*if(steerAngle - dirAngle > 0)
     {
         // We turn right, calculate new direction (relative to World Y)
         directionVector = Utils::AngleToVector(dirAngle + ENTITY_ANGULAR_TURN_SPEED);
@@ -153,13 +154,35 @@ void Entity::move()
         // We turn left, calculate new direction (relative to World Y)
         directionVector = Utils::AngleToVector(dirAngle - ENTITY_ANGULAR_TURN_SPEED);
     }
-
+    if(fabs(steerAngle - dirAngle) <= ENTITY_ANGULAR_TURN_SPEED)
+    {
+        directionVector = steeringVector;
+    }
+    else
+    {
+        QQuaternion q = QQuaternion::fromAxisAndAngle(0, 1, 0, dirAngle);
+        QVector3D rotetedSteering = q.rotatedVector(QVector3D(steeringVector));
+        if(rotetedSteering.x() > 0) // In direction vectors coordinate system
+        {
+            // Have to turn right (in world coordinate system)
+            directionVector = Utils::AngleToVector(dirAngle + ENTITY_ANGULAR_TURN_SPEED);
+        }
+        else
+        {
+            // Have to turn left (in world coordinate system)
+            directionVector = Utils::AngleToVector(dirAngle - ENTITY_ANGULAR_TURN_SPEED);
+        }
+    }*/
+    //if(DEBUG) Utils::DrawLine(position, position + 50*directionVector.toPointF());
     // Go to new position
-    position += directionVector.toPointF() * vel;
 
+    QVector2D newDirVec = directionVector + steeringVector * 0.1;
+    newDirVec.normalize();
+    position += newDirVec.toPointF() * vel;
+    directionVector = newDirVec;
     // Move tail as well
     tail.move(position);
 
-    if(DEBUG) Utils::DrawLine(position, position + 30*steeringVector.toPointF());
+    //if(DEBUG) Utils::DrawLine(position, position + 30*steeringVector.toPointF());
 
 }
