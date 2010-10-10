@@ -33,6 +33,8 @@ public:
     bool steerToTarget(QPointF target, qreal strength);
     void move();
 
+    void setTentacleTarget(QPointF target);
+
     QPointF pos();
 
     void setExpandingColor(QColor newColor);
@@ -55,6 +57,7 @@ private:
     QBrush gradientBrush;
 
     QList<Tentacle> tails;
+    QPointF tentacleTarget;
     int wanderCounter;
     bool wanderLeft;
 };

@@ -130,12 +130,17 @@ void Critter::move()
     // Move tails as well
     for(int i = 0; i < tails.size(); i++)
     {
-        tails[i].move(position);
+        tails[i].move(position, tentacleTarget);
     }
 
     gradientBrush = Utils::createRadialGradientBrush(position, tails[0].length(),
                                                      innerColor, outerColor,
                                                      radiantPos);
+}
+
+void Critter::setTentacleTarget(QPointF target)
+{
+    tentacleTarget = target;
 }
 
 QPointF Critter::pos()

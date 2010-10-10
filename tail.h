@@ -22,7 +22,7 @@ protected:
         TailSegment(QPointF newPos, qreal newRadius, TailSegment* prev);
         void drawSegment(QPainter* painter, QBrush* brush);
         void moveSegment();
-        void moveSegment(QVector2D targetDirection);
+        void moveSegment(QVector2D targetDirection, QPointF target);
 
         void updateSinuousOffset();  // Not used currently
 
@@ -39,7 +39,7 @@ class Tentacle : public Tail
 {
 public:
     Tentacle(const QPointF& pos, qreal angle, int numSegments, qreal startRadius, qreal radiusDiminish);
-    void move(QPointF newPos);
+    void move(QPointF newPos, QPointF target);
     void setTentacleAngle(qreal targetAngle); // [-180..180]
 
     qreal tentacleAngle;

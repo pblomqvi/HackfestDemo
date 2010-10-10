@@ -213,6 +213,9 @@ void DemoGLWidget::paintGL()
     painter.setBrush(QBrush());
 
     // Move entities
+    qreal minDistToCritter = 8000;
+    static Entity* closestToCritter = 0;
+    static int critterEnemyDetectionDelayer = 0;
     for(int i = 0; i < entities.size(); i++)
     {
         Entity *entity = entities[i];
@@ -221,13 +224,16 @@ void DemoGLWidget::paintGL()
         QMutableListIterator<Entity*> localFlock(entities);
 
         entity->clearSteering();
+        entity->steerToTarget(critter->pos(), STEER_TO_TARGET_STRENGTH);
         entity->steerWithFlock(localFlock, STEER_SEPARATION_STRENGTH, STEER_COHESION_STRENGTH);
-        if (critter != 0)
-        {
-            entity->steerToTarget(critter->pos(), STEER_TO_TARGET_STRENGTH);
-            entity->steerToAvoindWithinDistance(critter->pos(), STEER_AVOID_WITHIN_DISTANCE_STRENGTH);
-        }
+        qreal distToCritter = entity->steerToAvoindWithinDistance(critter->pos(), STEER_AVOID_WITHIN_DISTANCE_STRENGTH);
         entity->move();
+
+        if(critterEnemyDetectionDelayer == 0 && distToCritter < minDistToCritter)
+        {
+            closestToCritter = entity;
+            minDistToCritter = distToCritter;
+        }
     }
 
     foreach (Entity *entity, entities)
@@ -237,11 +243,18 @@ void DemoGLWidget::paintGL()
 
     if (critter != 0)
     {
+        critterEnemyDetectionDelayer = (critterEnemyDetectionDelayer + 1) % CRITTER_DETECTION_DELAY;
+
         // Update critter location
         critter->clearSteering();
         critter->steerForWander(STEER_WANDER_STRENGTH);
-        bool reached = critter->steerToTarget(targetLocation, STEER_TO_TARGET_STRENGTH);
-        if(reached) randomTarget();
+        critter->steerToTarget(QPointF(400,240), STEER_TO_CENTER_STRENGTH);
+        if(closestToCritter)
+        {
+            critter->steerToTarget(closestToCritter->pos(), STEER_TO_TARGET_STRENGTH);
+            if(DEBUG) Utils::DrawLine(critter->pos(), closestToCritter->pos());
+        }
+        critter->setTentacleTarget(closestToCritter->pos());
         critter->move();
         critter->updateColor();
 
@@ -258,7 +271,6 @@ void DemoGLWidget::paintGL()
     framesPerSecond.setNum(frames /(time.elapsed() / 1000.0), 'f', 2);
     painter.setPen(Qt::white);
     painter.drawText(20, 40, framesPerSecond + " fps");
-
 
     // Post processing
     /*

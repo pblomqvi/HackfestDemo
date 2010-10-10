@@ -30,9 +30,10 @@ public:
     void steerWithFlock(QMutableListIterator<Entity*> localFlock,
                         qreal separationStrength,
                         qreal cohesionStrength);
-    void steerToAvoindWithinDistance(QPointF target, qreal strength);
+    qreal steerToAvoindWithinDistance(QPointF target, qreal strength); // Returns distance
 
     void move();
+    QPointF pos();
 
 private:
 
@@ -46,9 +47,11 @@ private:
     QColor innerColor;
     QColor outerColor;
     QImage *cache;
-    int syncedInstrumentIndex;
 
     Tail tail;
+    int syncedInstrumentIndex;
+
+
 
 };
 
