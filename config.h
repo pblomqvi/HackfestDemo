@@ -26,7 +26,7 @@ const qreal STEER_COHESION_STRENGTH   = 0.7;
 const qreal STEER_WANDER_STRENGTH = 2.0;
 const qreal STEER_AVOID_WITHIN_DISTANCE_STRENGTH = 1.5;
 
-const int STEER_TO_CENTER_MARGIN = 100;
+const int STEER_TO_CENTER_MARGIN = 200;
 
 const qreal STEER_WANDER_MAX_CHANGE = 5; // in degrees
 const qreal STEER_WANDER_CHANGE_CHANGE = 0.1; // in degrees
