@@ -130,7 +130,7 @@ DemoGLWidget::~DemoGLWidget()
 void DemoGLWidget::loadReady()
 {
     qDebug("Playing music");
-    synth_play();
+    waitForClick = true;
 }
 
 void DemoGLWidget::initializeGL ()
@@ -338,7 +338,8 @@ void DemoGLWidget::paintGL()
             if(titleOcapacity < 0.0)
             {
                 drawTitle = false;
-                // TODO: start playing music
+                // start playing music
+                synth_play();
             }
 
         }
