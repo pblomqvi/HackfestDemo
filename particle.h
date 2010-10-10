@@ -14,14 +14,13 @@ class QPainter;
 class Particle
 {
 public:
-    Particle(const QPointF &position, qreal radius, const qreal velocity);
+    Particle(const QPointF &position, qreal radius);
     ~Particle();
 
-    void draw(QPainter *painter);
+    void draw(QPainter *painter, QPointF velocity);
 
 private:
     QPointF position;
-    qreal vel;
     qreal radius;
 };
 

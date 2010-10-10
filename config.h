@@ -6,7 +6,7 @@
 const bool DEBUG = true;
 const bool USE_SOUND = false;
 
-const int NUM_ENTITIES = 1;
+const int NUM_ENTITIES = 10;
 const qreal ENTITY_SPEED = 4.0;
 const qreal ENTITY_ANGULAR_TURN_SPEED = 5.0; // in degrees, not in use
 
@@ -35,5 +35,11 @@ const int   STEER_WANDER_COUNTER_DIVIDER = 10; // Only steer once in n frames
 const qreal STEER_AVOID_DISTANCE = 130;
 
 const qreal SINUOUS_TAIL_OFFSET_CHANGE_SPEED = 0.3;
+
+const qreal PARTICLE_PHASE_SPEED = 0.1;
+const int   PARTICLE_PHASE_MAX_x_OFFSET = 100;
+const int   PARTICLE_PHASE_MAX_y_OFFSET = 70;
+const int   PARTICLE_PHASE_MAX_X_VELOCITY = 2;
+const int   PARTICLE_PHASE_MAX_Y_VELOCITY = 0;
 
 #endif // CONFIG_H

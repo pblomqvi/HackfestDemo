@@ -19,6 +19,7 @@ public:
     static void DrawLine(QPointF from, QPointF to);
     static void DrawCircle(QPointF pos, qreal radius);
     static void DrawCircle(QPointF pos, qreal radius, QBrush brush);
+    static void DrawCircle(QPointF pos, qreal radius, QBrush brush, QPen pen);
 
     static QColor randomColor();
     static QBrush createRadialGradientBrush(const QPointF& pos, qreal radius,

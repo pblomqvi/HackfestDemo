@@ -2,20 +2,18 @@
 
 #include "Utils.h"
 
-Particle::Particle(const QPointF &position, qreal radius, const qreal velocity)
-        : position(position), vel(velocity), radius(radius)
+Particle::Particle(const QPointF &position, qreal radius)
+        : position(position), radius(radius)
 {
 }
 
-void Particle::draw(QPainter *painter)
+void Particle::draw(QPainter *painter, QPointF velocity)
 {
-    position += QPointF(vel, vel);
+    position += velocity;
 
     painter->save();
-    QPen pen(Qt::white);
-    pen.setWidth(2);
-    painter->setPen(pen);
-    painter->setBrush(QBrush());
-    Utils::DrawCircle(position, radius);
+    QPen pen(Qt::NoPen);
+    QBrush brush(Qt::cyan);
+    Utils::DrawCircle(position, 2*radius, brush, pen);
     painter->restore();
 }
