@@ -50,6 +50,7 @@
 
 #include "DemoGLWidget.h"
 #include "synth.h"
+#include "config.h"
 
 MainWindow::MainWindow()
 {
@@ -64,9 +65,9 @@ MainWindow::MainWindow()
 
     // Play music
     qDebug("Rendering music...");
-    synth_init();
+    if(USE_SOUND) synth_init();
     qDebug("Rendered");
-    synth_play();
+    if(USE_SOUND) synth_play();
 
     QObject::connect(timer, SIGNAL(timeout()), glwidget, SLOT(updateGL()));
     timer->start();

@@ -6,6 +6,7 @@
 #include <QPainter>
 #include <QPen>
 #include <math.h>
+#include <QQuaternion>
 
 Entity::Entity(const QPointF &position, qreal radius, qreal velocity, int syncedInstrument)
     : position(position), vel(velocity), radius(radius),
@@ -126,6 +127,18 @@ void Entity::steerWithFlock(QMutableListIterator<Entity*> localFlock,
     steeringVector.normalize();
 }
 
+void Entity::steerToAvoindWithinDistance(QPointF target, qreal strength)
+{
+    QVector2D fromTarget = QVector2D(position - target);
+    if(fromTarget.length() < STEER_AVOID_DISTANCE)
+    {
+        // Too close to target, avoid
+        fromTarget.normalize();
+        steeringVector += fromTarget * strength;
+        steeringVector.normalize();
+    }
+}
+
 void Entity::move()
 {
     // Directions angle from World-Y axis
@@ -133,7 +146,7 @@ void Entity::move()
     double steerAngle = Utils::VectorToAngle(steeringVector);
 
     // Steering angle relative to direction
-    if(steerAngle - dirAngle > 0)
+    /*if(steerAngle - dirAngle > 0)
     {
         // We turn right, calculate new direction (relative to World Y)
         directionVector = Utils::AngleToVector(dirAngle + ENTITY_ANGULAR_TURN_SPEED);
@@ -143,14 +156,36 @@ void Entity::move()
         // We turn left, calculate new direction (relative to World Y)
         directionVector = Utils::AngleToVector(dirAngle - ENTITY_ANGULAR_TURN_SPEED);
     }
-
+    if(fabs(steerAngle - dirAngle) <= ENTITY_ANGULAR_TURN_SPEED)
+    {
+        directionVector = steeringVector;
+    }
+    else
+    {
+        QQuaternion q = QQuaternion::fromAxisAndAngle(0, 1, 0, dirAngle);
+        QVector3D rotetedSteering = q.rotatedVector(QVector3D(steeringVector));
+        if(rotetedSteering.x() > 0) // In direction vectors coordinate system
+        {
+            // Have to turn right (in world coordinate system)
+            directionVector = Utils::AngleToVector(dirAngle + ENTITY_ANGULAR_TURN_SPEED);
+        }
+        else
+        {
+            // Have to turn left (in world coordinate system)
+            directionVector = Utils::AngleToVector(dirAngle - ENTITY_ANGULAR_TURN_SPEED);
+        }
+    }*/
+    //if(DEBUG) Utils::DrawLine(position, position + 50*directionVector.toPointF());
     // Go to new position
-    float env = synth_get_current_envelope_for_instrument(syncedInstrumentIndex);
-    position += directionVector.toPointF() * (vel + env*radius);
 
+    QVector2D newDirVec = directionVector + steeringVector * 0.1;
+    newDirVec.normalize();
+    position += newDirVec.toPointF() * (vel +
+                synth_get_current_envelope_for_instrument(syncedInstrumentIndex*radius));
+    directionVector = newDirVec;
     // Move tail as well
     tail.move(position);
 
-    if(DEBUG) Utils::DrawLine(position, position + 30*steeringVector.toPointF());
+    //if(DEBUG) Utils::DrawLine(position, position + 30*steeringVector.toPointF());
 
 }

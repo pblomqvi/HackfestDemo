@@ -30,6 +30,7 @@ public:
     void steerWithFlock(QMutableListIterator<Entity*> localFlock,
                         qreal separationStrength,
                         qreal cohesionStrength);
+    void steerToAvoindWithinDistance(QPointF target, qreal strength);
 
     void move();
 

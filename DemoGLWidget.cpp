@@ -110,7 +110,7 @@ void DemoGLWidget::initializeGL ()
 {
     glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
 
-    //createEntities(NUM_ENTITIES);
+    if(!USE_SOUND) createEntities(NUM_ENTITIES);
 
     // Particles
     for (int i = 0; i < 100; ++i) {
@@ -237,6 +237,7 @@ void DemoGLWidget::paintGL()
         entity->clearSteering();
         entity->steerToTarget(critter->pos(), STEER_TO_TARGET_STRENGTH);
         entity->steerWithFlock(localFlock, STEER_SEPARATION_STRENGTH, STEER_COHESION_STRENGTH);
+        entity->steerToAvoindWithinDistance(critter->pos(), STEER_AVOID_WITHIN_DISTANCE_STRENGTH);
         entity->move();
     }
 
@@ -280,6 +281,8 @@ void DemoGLWidget::createEntities(int number)
 
         entities.append(new Entity(position, radius, velocity, 0));
     }    
+
+    critter = new Critter(QPointF(500,200), 10, CRITTER_SPEED);
 }
 
 void DemoGLWidget::randomTarget()
