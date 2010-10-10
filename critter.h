@@ -39,7 +39,6 @@ public:
     void updateColor();
 
 private:
-    QColor randomColor();
 
     QBrush brush;
     QPointF position;
@@ -52,7 +51,7 @@ private:
     QColor outerColor;
     QImage *cache;
 
-    QRadialGradient gradient;
+    qreal radiantPos;
     QBrush gradientBrush;
 
     QList<Tentacle> tails;

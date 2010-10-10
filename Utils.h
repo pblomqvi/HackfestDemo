@@ -21,6 +21,10 @@ public:
     static void DrawCircle(QPointF pos, qreal radius, QBrush brush);
 
     static QColor randomColor();
+    static QBrush createRadialGradientBrush(const QPointF& pos, qreal radius,
+                                            QColor inner, QColor outer,
+                                            qreal phase);
+
 
     static void InitFBO(FBO *fbo);
     static void DeleteFBO(FBO *fbo);

@@ -7,7 +7,7 @@
 #include <math.h>
 
 Critter::Critter(const QPointF &position, qreal radius, qreal velocity)
-    : position(position), vel(velocity), radius(radius), tails(), gradient()
+    : position(position), vel(velocity), radius(radius), tails()
 {
     // Create tentacles with differing angles
     tails.append(Tentacle(position,    0, 5, 8.0 ,1.0));
@@ -23,31 +23,22 @@ Critter::Critter(const QPointF &position, qreal radius, qreal velocity)
     prevSteeringVector = QVector2D();
     directionVector = QVector2D(0.0, 1.0); // Default direction is towards World Y
 
-    gradient.setCenter(position);
-    gradient.setFocalPoint(position);
-    gradient.setRadius(tails[0].length());
-    gradientBrush = QBrush(gradient);
-
-    innerColor = randomColor();
-    outerColor = randomColor();
+    innerColor = Utils::randomColor();
+    outerColor = Utils::randomColor();
     cache = 0;
     updateBrush();
+
+    radiantPos = 0.0;
+    gradientBrush = Utils::createRadialGradientBrush(position, tails[0].length(),
+                                                     innerColor, outerColor,
+                                                     radiantPos);
+
 }
 
 Critter::~Critter()
 {
     if (cache)
         delete cache;
-}
-
-QColor Critter::randomColor()
-{
-    int red = int(185 + 70.0*qrand()/(RAND_MAX+1.0));
-    int green = int(185 + 70.0*qrand()/(RAND_MAX+1.0));
-    int blue = int(205 + 50.0*qrand()/(RAND_MAX+1.0));
-    int alpha = int(91 + 100.0*qrand()/(RAND_MAX+1.0));
-
-    return QColor(red, green, blue, alpha);
 }
 
 void Critter::updateCache()
@@ -135,9 +126,9 @@ void Critter::move()
         tails[i].move(position);
     }
 
-    gradient.setCenter(position);
-    gradient.setFocalPoint(position);
-    gradientBrush = QBrush(gradient);
+    gradientBrush = Utils::createRadialGradientBrush(position, tails[0].length(),
+                                                     innerColor, outerColor,
+                                                     radiantPos);
 }
 
 QPointF Critter::pos()
@@ -149,21 +140,11 @@ void Critter::setExpandingColor(QColor newColor)
 {
     innerColor = outerColor;
     outerColor = newColor;
-
-    gradient.setColorAt(0.0, innerColor);  // [0]
-    gradient.setColorAt(1.0, outerColor);  // [1]
-   // gradient.setColorAt(0.0, outerColor);  // [2]
+    radiantPos = 0.01;
 }
 
 void Critter::updateColor()
 {
-    /*
-    qreal pos = gradient.stops().at(2).first + CRITTER_GRADIENT_SPEED;
-    if(pos < 1.0 && gradient.stops().size() == 3)
-    {
-        printf("*\n");
-        gradient.stops().remove(2);
-        gradient.setColorAt(pos, outerColor);
-    }
-    */
+    radiantPos += CRITTER_GRADIENT_SPEED;
+    if(radiantPos > 0.99) radiantPos = 0.99;
 }

@@ -1,6 +1,8 @@
 #include "Utils.h"
 
 #include <QVector2D>
+#include <QRadialGradient>
+#include <QBrush>
 #include <math.h>
 #include <QtOpenGL>
 
@@ -46,12 +48,35 @@ void Utils::DrawCircle(QPointF pos, qreal radius, QBrush brush)
 
 QColor Utils::randomColor()
 {
-    int red = int(185 + 70.0*qrand()/(RAND_MAX+1.0));
-    int green = int(185 + 70.0*qrand()/(RAND_MAX+1.0));
-    int blue = int(205 + 50.0*qrand()/(RAND_MAX+1.0));
+    int red = int(255.0*qrand()/(RAND_MAX+1.0));
+    int green = int(255.0*qrand()/(RAND_MAX+1.0));
+    int blue = int(255.0*qrand()/(RAND_MAX+1.0));
     int alpha = int(91 + 100.0*qrand()/(RAND_MAX+1.0));
 
     return QColor(red, green, blue, alpha);
+}
+
+QBrush Utils::createRadialGradientBrush(const QPointF& pos, qreal radius,
+                                        QColor inner, QColor outer,
+                                        qreal phase)
+{
+    QRadialGradient gradient;
+    gradient.setCenter(pos);
+    gradient.setFocalPoint(pos);
+    gradient.setRadius(radius);
+    if(phase <= 0.5)
+    {
+        gradient.setColorAt(0.01, inner);
+        gradient.setColorAt(2*phase, outer);
+        gradient.setColorAt(0.99, outer);
+    }
+    else
+    {
+        gradient.setColorAt(0.01, inner);
+        gradient.setColorAt(1.0 - 2*(1.0-phase), inner);
+        gradient.setColorAt(0.99, outer);
+    }
+    return QBrush(gradient);
 }
 
 // Angle in degrees from positive Y-axis in range [-180, 180]
