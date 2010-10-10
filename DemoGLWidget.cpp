@@ -110,14 +110,25 @@ void DemoGLWidget::initializeGL ()
 {
     glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
 
-    if(!USE_SOUND) createEntities(NUM_ENTITIES);
+    if(!USE_SOUND)
+    {
+        qDebug("Creating entities");
+        createEntities(NUM_ENTITIES);
+    }
 
     // Particles
-    for (int i = 0; i < 100; ++i) {
-        QPointF position(width()*((qrand()/(RAND_MAX+1.0))),
-                         height()*((qrand()/(RAND_MAX+1.0))));
-        qreal radius = qMin(7.0, 15 * qrand()/(RAND_MAX+1.0));
-        qreal velocity = qMin(5.0, 7 * qrand()/(RAND_MAX+1.0));
+    for (int i = 0; i < 40; ++i) {
+        float x = rand()%(800);
+        float y = rand()%(480);
+
+        QPointF position(x,y);
+        qreal radius = qMin(1.0, 3.0f * qrand()/(RAND_MAX+1.0));
+        qreal velocity = qMin(0.1, 1.0f * qrand()/(RAND_MAX+1.0));
+
+        if (rand()%100 < 40)
+        {
+            velocity = -velocity;
+        }
 
         particles.append(new Particle(position, radius, velocity));
     }
@@ -201,11 +212,41 @@ void DemoGLWidget::paintGL()
     // Draw Entities and Critter    
     painter.setBrush(QBrush());
 
+    // Move entities
+    for(int i = 0; i < entities.size(); i++)
+    {
+        Entity *entity = entities[i];
+
+        // Use all entities as local flock for now
+        QMutableListIterator<Entity*> localFlock(entities);
+
+        entity->clearSteering();
+        entity->steerWithFlock(localFlock, STEER_SEPARATION_STRENGTH, STEER_COHESION_STRENGTH);
+        if (critter != 0)
+        {
+            entity->steerToTarget(critter->pos(), STEER_TO_TARGET_STRENGTH);
+            entity->steerToAvoindWithinDistance(critter->pos(), STEER_AVOID_WITHIN_DISTANCE_STRENGTH);
+        }
+        entity->move();
+    }
+
     foreach (Entity *entity, entities)
     {
         entity->drawEntity(&painter);
     }
-    critter->drawCritter(&painter);
+
+    if (critter != 0)
+    {
+        // Update critter location
+        critter->clearSteering();
+        critter->steerForWander(STEER_WANDER_STRENGTH);
+        bool reached = critter->steerToTarget(targetLocation, STEER_TO_TARGET_STRENGTH);
+        if(reached) randomTarget();
+        critter->move();
+        critter->updateColor();
+
+        critter->drawCritter(&painter);
+    }
 
     foreach (Particle *particle, particles)
     {
@@ -218,28 +259,6 @@ void DemoGLWidget::paintGL()
     painter.setPen(Qt::white);
     painter.drawText(20, 40, framesPerSecond + " fps");
 
-    // Update critter location
-    critter->clearSteering();
-    critter->steerForWander(STEER_WANDER_STRENGTH);
-    bool reached = critter->steerToTarget(targetLocation, STEER_TO_TARGET_STRENGTH);
-    if(reached) randomTarget();
-    critter->move();
-    critter->updateColor();
-
-    // Move entities
-    for(int i = 0; i < entities.size(); i++)
-    {
-        Entity *entity = entities[i];
-
-        // Use all entities as local flock for now
-        QMutableListIterator<Entity*> localFlock(entities);
-
-        entity->clearSteering();
-        entity->steerToTarget(critter->pos(), STEER_TO_TARGET_STRENGTH);
-        entity->steerWithFlock(localFlock, STEER_SEPARATION_STRENGTH, STEER_COHESION_STRENGTH);
-        entity->steerToAvoindWithinDistance(critter->pos(), STEER_AVOID_WITHIN_DISTANCE_STRENGTH);
-        entity->move();
-    }
 
     // Post processing
     /*
@@ -280,7 +299,7 @@ void DemoGLWidget::createEntities(int number)
         qreal velocity = ENTITY_SPEED;
 
         entities.append(new Entity(position, radius, velocity, 0));
-    }    
+    }
 
     critter = new Critter(QPointF(500,200), 10, CRITTER_SPEED);
 }
@@ -297,6 +316,5 @@ void DemoGLWidget::mouseMoveEvent (QMouseEvent* event)
     targetLocation = QPointF(event->x(), event->y());
     event->accept();
 
-    critter->setExpandingColor(Utils::randomColor());
+    if (critter != 0) critter->setExpandingColor(Utils::randomColor());
 }
-
