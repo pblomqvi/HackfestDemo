@@ -275,10 +275,13 @@ void DemoGLWidget::paintGL()
     }
 
     // Display FPS
-    QString framesPerSecond;
-    framesPerSecond.setNum(frames /(time.elapsed() / 1000.0), 'f', 2);
-    painter.setPen(Qt::white);
-    painter.drawText(20, 40, framesPerSecond + " fps");
+    if (DEBUG)
+    {
+        QString framesPerSecond;
+        framesPerSecond.setNum(frames /(time.elapsed() / 1000.0), 'f', 2);
+        painter.setPen(Qt::white);
+        painter.drawText(20, 40, framesPerSecond + " fps");
+    }
 
     // Post processing
     /*
