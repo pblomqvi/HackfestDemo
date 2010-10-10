@@ -46,6 +46,16 @@ void Utils::DrawCircle(QPointF pos, qreal radius, QBrush brush)
     painter->endNativePainting();
 }
 
+void Utils::DrawCircle(QPointF pos, qreal radius, QBrush brush, QPen pen)
+{
+    painter->beginNativePainting();
+    painter->setPen(pen);
+    painter->setBrush(brush);
+    painter->drawEllipse(pos, radius, radius);
+    painter->endNativePainting();
+}
+
+
 QColor Utils::randomColor()
 {
     int red = int(255.0*qrand()/(RAND_MAX+1.0));

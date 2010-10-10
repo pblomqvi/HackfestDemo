@@ -118,19 +118,13 @@ void DemoGLWidget::initializeGL ()
 
     // Particles
     for (int i = 0; i < 40; ++i) {
-        float x = rand()%(800);
-        float y = rand()%(480);
+        float x = rand()%(800 + 2*PARTICLE_PHASE_MAX_x_OFFSET);
+        float y = rand()%(480)+ 2*PARTICLE_PHASE_MAX_y_OFFSET;
 
-        QPointF position(x,y);
+        QPointF position(x - PARTICLE_PHASE_MAX_x_OFFSET, y - PARTICLE_PHASE_MAX_y_OFFSET);
         qreal radius = qMin(1.0, 3.0f * qrand()/(RAND_MAX+1.0));
-        qreal velocity = qMin(0.1, 1.0f * qrand()/(RAND_MAX+1.0));
 
-        if (rand()%100 < 40)
-        {
-            velocity = -velocity;
-        }
-
-        particles.append(new Particle(position, radius, velocity));
+        particles.append(new Particle(position, radius));
     }
 }
 
@@ -266,9 +260,13 @@ void DemoGLWidget::paintGL()
         critter->drawCritter(&painter);
     }
 
+    static qreal particlePhase = 3.13149 / 2;
+    particlePhase += PARTICLE_PHASE_SPEED;
+    QPointF velocity( sin(particlePhase) * PARTICLE_PHASE_MAX_X_VELOCITY,0);
+                  //   (rand() % (PARTICLE_PHASE_MAX_Y_VELOCITY*3)) - PARTICLE_PHASE_MAX_Y_VELOCITY);
     foreach (Particle *particle, particles)
     {
-        particle->draw(&painter);
+        particle->draw(&painter, velocity);
     }
 
     // Display FPS
