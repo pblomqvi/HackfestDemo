@@ -85,12 +85,15 @@ void Tail::TailSegment::moveSegment()
     pos = prevSegment->pos + (offsetVector * (radius+prevSegment->radius)).toPointF();
 }
 
-void Tail::TailSegment::moveSegment(QVector2D targetDirection)
+void Tail::TailSegment::moveSegment(QVector2D targetDirection, QPointF target)
 {
+    QVector2D targetDirection2 = QVector2D(target-pos).normalized();
+
     // Segment location is based on previous segments location
     QVector2D offsetVector = QVector2D(pos - prevSegment->pos);
     offsetVector.normalize();
-    offsetVector += targetDirection * TAIL_TARGET_DIRECTION_STRENGTH;
+    offsetVector += targetDirection * TAIL_TARGET_DIRECTION_STRENGTH
+                    + targetDirection2 * TAIL_TARGET_DIRECTION2_STRENGTH;
     offsetVector.normalize();
 
     pos = prevSegment->pos + (offsetVector * (radius+prevSegment->radius)).toPointF();
@@ -128,7 +131,7 @@ Tentacle::Tentacle(const QPointF& pos, qreal angle, int numSegments, qreal start
     setTentacleAngle(angle);
 }
 
-void Tentacle::move(QPointF newPos)
+void Tentacle::move(QPointF newPos, QPointF target)
 {
     // Tentacle move takes tentacleAngle into account
     // Move the first segment
@@ -137,7 +140,7 @@ void Tentacle::move(QPointF newPos)
     // Move the rest
     for(int i = 1; i < segments.length(); i++)
     {
-        segments[i].moveSegment(tentacleTargetDir);
+        segments[i].moveSegment(tentacleTargetDir, target);
     }
 }
 void Tentacle::setTentacleAngle(qreal targetAngle)

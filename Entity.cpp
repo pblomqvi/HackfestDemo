@@ -127,7 +127,7 @@ void Entity::steerWithFlock(QMutableListIterator<Entity*> localFlock,
     steeringVector.normalize();
 }
 
-void Entity::steerToAvoindWithinDistance(QPointF target, qreal strength)
+qreal Entity::steerToAvoindWithinDistance(QPointF target, qreal strength)
 {
     QVector2D fromTarget = QVector2D(position - target);
     if(fromTarget.length() < STEER_AVOID_DISTANCE)
@@ -137,13 +137,14 @@ void Entity::steerToAvoindWithinDistance(QPointF target, qreal strength)
         steeringVector += fromTarget * strength;
         steeringVector.normalize();
     }
+    return fromTarget.length();
 }
 
 void Entity::move()
 {
     // Directions angle from World-Y axis
-    double dirAngle   = Utils::VectorToAngle(directionVector);
-    double steerAngle = Utils::VectorToAngle(steeringVector);
+    //double dirAngle   = Utils::VectorToAngle(directionVector);
+    //double steerAngle = Utils::VectorToAngle(steeringVector);
 
     // Steering angle relative to direction
     /*if(steerAngle - dirAngle > 0)
@@ -188,4 +189,9 @@ void Entity::move()
 
     //if(DEBUG) Utils::DrawLine(position, position + 30*steeringVector.toPointF());
 
+}
+
+QPointF Entity::pos()
+{
+    return position;
 }

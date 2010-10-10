@@ -218,15 +218,9 @@ void DemoGLWidget::paintGL()
     painter.setPen(Qt::white);
     painter.drawText(20, 40, framesPerSecond + " fps");
 
-    // Update critter location
-    critter->clearSteering();
-    critter->steerForWander(STEER_WANDER_STRENGTH);
-    bool reached = critter->steerToTarget(targetLocation, STEER_TO_TARGET_STRENGTH);
-    if(reached) randomTarget();
-    critter->move();
-    critter->updateColor();
-
     // Move entities
+    qreal minDistToCritter = 8000;
+    Entity* closestToCritter = 0;
     for(int i = 0; i < entities.size(); i++)
     {
         Entity *entity = entities[i];
@@ -237,9 +231,28 @@ void DemoGLWidget::paintGL()
         entity->clearSteering();
         entity->steerToTarget(critter->pos(), STEER_TO_TARGET_STRENGTH);
         entity->steerWithFlock(localFlock, STEER_SEPARATION_STRENGTH, STEER_COHESION_STRENGTH);
-        entity->steerToAvoindWithinDistance(critter->pos(), STEER_AVOID_WITHIN_DISTANCE_STRENGTH);
+        qreal distToCritter = entity->steerToAvoindWithinDistance(critter->pos(), STEER_AVOID_WITHIN_DISTANCE_STRENGTH);
         entity->move();
+
+        if(distToCritter < minDistToCritter)
+        {
+            closestToCritter = entity;
+            minDistToCritter = distToCritter;
+        }
+
     }
+
+    // Update critter location
+    critter->clearSteering();
+    critter->steerForWander(STEER_WANDER_STRENGTH);
+    if(closestToCritter)
+    {
+        critter->steerToTarget(closestToCritter->pos(), STEER_TO_TARGET_STRENGTH);
+        if(DEBUG) Utils::DrawLine(critter->pos(), closestToCritter->pos());
+    }
+    critter->setTentacleTarget(closestToCritter->pos());
+    critter->move();
+    critter->updateColor();
 
     // Post processing
     /*
