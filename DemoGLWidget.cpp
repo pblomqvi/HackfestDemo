@@ -219,14 +219,18 @@ void DemoGLWidget::paintGL()
     for(int i = 0; i < entities.size(); i++)
     {
         Entity *entity = entities[i];
+        qreal distToCritter = 10000;
 
         // Use all entities as local flock for now
         QMutableListIterator<Entity*> localFlock(entities);
 
         entity->clearSteering();
-        entity->steerToTarget(critter->pos(), STEER_TO_TARGET_STRENGTH);
+        if (critter != 0)
+        {
+            entity->steerToTarget(critter->pos(), STEER_TO_TARGET_STRENGTH);
+            distToCritter = entity->steerToAvoindWithinDistance(critter->pos(), STEER_AVOID_WITHIN_DISTANCE_STRENGTH);
+        }
         entity->steerWithFlock(localFlock, STEER_SEPARATION_STRENGTH, STEER_COHESION_STRENGTH);
-        qreal distToCritter = entity->steerToAvoindWithinDistance(critter->pos(), STEER_AVOID_WITHIN_DISTANCE_STRENGTH);
         entity->move();
 
         if(critterEnemyDetectionDelayer == 0 && distToCritter < minDistToCritter)
@@ -248,13 +252,14 @@ void DemoGLWidget::paintGL()
         // Update critter location
         critter->clearSteering();
         critter->steerForWander(STEER_WANDER_STRENGTH);
-        critter->steerToTarget(QPointF(400,240), STEER_TO_CENTER_STRENGTH);
+        critter->steerToStayInScreen(STEER_TO_CENTER_STRENGTH);
         if(closestToCritter)
         {
             critter->steerToTarget(closestToCritter->pos(), STEER_TO_TARGET_STRENGTH);
             if(DEBUG) Utils::DrawLine(critter->pos(), closestToCritter->pos());
+            critter->setTentacleTarget(closestToCritter->pos());
         }
-        critter->setTentacleTarget(closestToCritter->pos());
+
         critter->move();
         critter->updateColor();
 

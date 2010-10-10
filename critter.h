@@ -31,6 +31,7 @@ public:
     void clearSteering();
     void steerForWander(qreal strength);
     bool steerToTarget(QPointF target, qreal strength);
+    void steerToStayInScreen(qreal strength);
     void move();
 
     void setTentacleTarget(QPointF target);

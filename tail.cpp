@@ -88,12 +88,14 @@ void Tail::TailSegment::moveSegment()
 void Tail::TailSegment::moveSegment(QVector2D targetDirection, QPointF target)
 {
     QVector2D targetDirection2 = QVector2D(target-pos).normalized();
+    qreal targetDir2Strength = TAIL_TARGET_DIRECTION2_STRENGTH;
+    if(target.isNull()) targetDir2Strength = 0.0;  // TODO: Ugly hack
 
     // Segment location is based on previous segments location
     QVector2D offsetVector = QVector2D(pos - prevSegment->pos);
     offsetVector.normalize();
     offsetVector += targetDirection * TAIL_TARGET_DIRECTION_STRENGTH
-                    + targetDirection2 * TAIL_TARGET_DIRECTION2_STRENGTH;
+                    + targetDirection2 * targetDir2Strength;
     offsetVector.normalize();
 
     pos = prevSegment->pos + (offsetVector * (radius+prevSegment->radius)).toPointF();

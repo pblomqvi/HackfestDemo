@@ -121,6 +121,42 @@ bool Critter::steerToTarget(QPointF target, qreal strength)
     return targetReached;
 }
 
+void Critter::steerToStayInScreen(qreal strength)
+{
+
+    qreal x = 0;
+    qreal y = 0;
+    if(position.x() > 800 - STEER_TO_CENTER_MARGIN)
+    {
+        x = -1;
+        if(DEBUG) Utils::DrawLine(QPointF(800-STEER_TO_CENTER_MARGIN, 0),
+                                  QPointF(800-STEER_TO_CENTER_MARGIN, 480));
+    }
+    else if(position.x() < STEER_TO_CENTER_MARGIN)
+    {
+        x = 1;
+        if(DEBUG) Utils::DrawLine(QPointF(STEER_TO_CENTER_MARGIN, 0),
+                                  QPointF(STEER_TO_CENTER_MARGIN, 480));
+    }
+
+    if(position.y() > 480 - STEER_TO_CENTER_MARGIN)
+    {
+        y = -1;
+        if(DEBUG) Utils::DrawLine(QPointF(0, 480-STEER_TO_CENTER_MARGIN),
+                                  QPointF(800, 480-STEER_TO_CENTER_MARGIN));
+    }
+    else if(position.y() < STEER_TO_CENTER_MARGIN)
+    {
+        y = 1;
+        if(DEBUG) Utils::DrawLine(QPointF(0, STEER_TO_CENTER_MARGIN),
+                                  QPointF(800, STEER_TO_CENTER_MARGIN));
+    }
+    QVector2D toCenter(x,y);
+    toCenter.normalize();
+    steeringVector += toCenter * strength;
+    steeringVector.normalize();
+}
+
 void Critter::move()
 {
     QPointF newPosition = position + steeringVector.toPointF() * vel;
