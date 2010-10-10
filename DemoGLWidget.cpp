@@ -220,7 +220,8 @@ void DemoGLWidget::paintGL()
 
     // Move entities
     qreal minDistToCritter = 8000;
-    Entity* closestToCritter = 0;
+    static Entity* closestToCritter = 0;
+    static int critterEnemyDetectionDelayer = 0;
     for(int i = 0; i < entities.size(); i++)
     {
         Entity *entity = entities[i];
@@ -234,17 +235,18 @@ void DemoGLWidget::paintGL()
         qreal distToCritter = entity->steerToAvoindWithinDistance(critter->pos(), STEER_AVOID_WITHIN_DISTANCE_STRENGTH);
         entity->move();
 
-        if(distToCritter < minDistToCritter)
+        if(critterEnemyDetectionDelayer == 0 && distToCritter < minDistToCritter)
         {
             closestToCritter = entity;
             minDistToCritter = distToCritter;
         }
-
     }
+    critterEnemyDetectionDelayer = (critterEnemyDetectionDelayer + 1) % CRITTER_DETECTION_DELAY;
 
     // Update critter location
     critter->clearSteering();
     critter->steerForWander(STEER_WANDER_STRENGTH);
+    critter->steerToTarget(QPointF(400,240), STEER_TO_CENTER_STRENGTH);
     if(closestToCritter)
     {
         critter->steerToTarget(closestToCritter->pos(), STEER_TO_TARGET_STRENGTH);
