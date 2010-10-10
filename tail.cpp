@@ -73,7 +73,7 @@ void Tail::TailSegment::drawSegment(QPainter* painter, QBrush* brush)
     }
     else
     {
-        Utils::DrawCircle(pos, radius);
+        Utils::DrawCircle(pos, radius, QBrush(), QPen(Qt::NoPen));
     }
 }
 

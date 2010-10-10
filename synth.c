@@ -119,7 +119,9 @@ void synth_render()
 	// Loop each instrument
         int instrumentIndex;
         for (instrumentIndex = 0; instrumentIndex < SYNTH_MAX_INSTRUMENT_COUNT; instrumentIndex++)
-        {
+        { 
+                printf("rendering instrument %i / %i \n", instrumentIndex+1, SYNTH_MAX_INSTRUMENT_COUNT);
+
                 instrument ins = songdata.instruments[instrumentIndex];
                 instrument* instrument = &ins;
 

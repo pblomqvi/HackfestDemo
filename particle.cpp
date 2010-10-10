@@ -13,7 +13,7 @@ void Particle::draw(QPainter *painter, QPointF velocity)
 
     painter->save();
     QPen pen(Qt::NoPen);
-    QBrush brush(Qt::cyan);
+    QBrush brush(QColor(200,230,255));
     Utils::DrawCircle(position, 2*radius, brush, pen);
     painter->restore();
 }

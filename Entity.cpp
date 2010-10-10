@@ -16,8 +16,10 @@ Entity::Entity(const QPointF &position, qreal radius, qreal velocity, int synced
     prevSteeringVector = QVector2D();
     directionVector = QVector2D(0.0, 1.0); // Default direction is towards World Y
 
-    innerColor = QColor(40,40,90,20);
-    outerColor = QColor(0,200,200,20);
+    innerColor = Utils::randomColor();
+    outerColor = Utils::randomColor();
+    //innerColor.setAlphaF(0.1);
+    //outerColor.setAlpha(0.1);
     cache = 0;
     updateBrush();
 }
@@ -52,6 +54,7 @@ void Entity::updateBrush()
     gradient.setColorAt(0.25, innerColor);
     gradient.setColorAt(1, outerColor);
     brush = QBrush(gradient);
+
     updateCache();
 }
 
@@ -59,11 +62,23 @@ void Entity::drawEntity(QPainter *painter)
 {
     painter->save();
 
+    float env = synth_get_current_envelope_for_instrument(syncedInstrumentIndex);
+    //painter->setOpacity(0.8);
+    float opacity = env;
+
+    if (opacity > 0.5f)
+    {
+        opacity = 0.5f;
+    }
+    else if (opacity < 0.2f)
+    {
+        opacity = 0.2f;
+    }
+
+    painter->setOpacity(opacity);
+
     // Draw tail first
     tail.drawTail(painter, &brush);
-
-    //painter->setOpacity(0.8);
-    painter->setOpacity(synth_get_current_envelope_for_instrument(syncedInstrumentIndex));
 
     painter->translate(position.x() - radius, position.y() - radius);
     painter->drawImage(0, 0, *cache);

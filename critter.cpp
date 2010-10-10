@@ -159,7 +159,7 @@ void Critter::steerToStayInScreen(qreal strength)
 
 void Critter::move()
 {
-    QPointF newPosition = position + steeringVector.toPointF() * vel;
+    QPointF newPosition = position + steeringVector.toPointF() * (vel + synth_get_current_envelope_for_instrument(0));
     directionVector = QVector2D(newPosition - position);
     position = newPosition;
 
