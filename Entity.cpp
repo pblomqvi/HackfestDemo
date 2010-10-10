@@ -124,6 +124,18 @@ void Entity::steerWithFlock(QMutableListIterator<Entity*> localFlock,
     steeringVector.normalize();
 }
 
+void Entity::steerToAvoindWithinDistance(QPointF target, qreal strength)
+{
+    QVector2D fromTarget = QVector2D(position - target);
+    if(fromTarget.length() < STEER_AVOID_DISTANCE)
+    {
+        // Too close to target, avoid
+        fromTarget.normalize();
+        steeringVector += fromTarget * strength;
+        steeringVector.normalize();
+    }
+}
+
 void Entity::move()
 {
     // Directions angle from World-Y axis

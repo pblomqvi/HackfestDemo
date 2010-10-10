@@ -84,6 +84,7 @@ void DemoGLWidget::paintGL()
         entity->clearSteering();
         entity->steerToTarget(critter->pos(), STEER_TO_TARGET_STRENGTH);
         entity->steerWithFlock(localFlock, STEER_SEPARATION_STRENGTH, STEER_COHESION_STRENGTH);
+        entity->steerToAvoindWithinDistance(critter->pos(), STEER_AVOID_WITHIN_DISTANCE_STRENGTH);
         entity->move();
     }
 
