@@ -16,6 +16,10 @@ public:
     static void DrawCircle(QPointF pos, qreal radius, QBrush brush);
 
     static QColor randomColor();
+    static QBrush createRadialGradientBrush(const QPointF& pos, qreal radius,
+                                            QColor inner, QColor outer,
+                                            qreal phase);
+
 
     // Angle in degrees from positive Y-axis in range [-180, 180]
     static qreal VectorToAngle(QVector2D vec);
