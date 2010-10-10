@@ -254,7 +254,7 @@ void DemoGLWidget::paintGL()
         // Update critter location
         critter->clearSteering();
         critter->steerForWander(STEER_WANDER_STRENGTH);
-        critter->steerToTarget(QPointF(400,240), STEER_TO_CENTER_STRENGTH);
+        critter->steerToStayInScreen(STEER_TO_CENTER_STRENGTH);
         if(closestToCritter)
         {
             critter->steerToTarget(closestToCritter->pos(), STEER_TO_TARGET_STRENGTH);
