@@ -8,7 +8,7 @@
 #include <math.h>
 
 Critter::Critter(const QPointF &position, qreal radius, qreal velocity)
-    : position(position), vel(velocity), radius(radius), tails()
+    : position(position), vel(velocity), radius(radius), tails(), tentacleTarget()
 {
     // Create tentacles with differing angles
     tails.append(Tentacle(position,    0, 5, 8.0 ,1.0));
@@ -75,7 +75,7 @@ void Critter::drawCritter(QPainter *painter)
 
     float opacity = synth_get_current_envelope_for_instrument(0);
 
-    if (opacity < 0.1f) opacity = 0.1f;
+    if (opacity < 0.05f) opacity = 0.05f;
     painter->setOpacity(opacity);
 
     // Draw tail first

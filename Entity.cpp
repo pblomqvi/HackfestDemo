@@ -181,8 +181,8 @@ void Entity::move()
 
     QVector2D newDirVec = directionVector + steeringVector * 0.1;
     newDirVec.normalize();
-    position += newDirVec.toPointF() * (vel +
-                synth_get_current_envelope_for_instrument(syncedInstrumentIndex)*radius);
+    float env = synth_get_current_envelope_for_instrument(syncedInstrumentIndex);
+    position += newDirVec.toPointF() * (vel + env);
     directionVector = newDirVec;
     // Move tail as well
     tail.move(position);

@@ -29,7 +29,7 @@ extern "C" {
 
 static instrument ins_lead = {
         // General
-        75, // Pan
+        35, // Pan
         // Oscillator 1
         0, // Detune for octave
         0, // Detune for semitone
@@ -51,7 +51,7 @@ static instrument ins_lead = {
     100, // Delay amount
         0, // Overdrive amount
         // Patterns
-        {0,0,0,0,1,1,1,1,1,1}, // Pattern order
+        {0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0}, // Pattern order
         // Columns
         {
                 {{0x94, 0, 0, 0, 0, 0, 0x05, 0, 0x54, 0, 0, 0, 0, 0, 0x05, 0, 0x44, 0, 0, 0, 0, 0, 0x05, 0, 0x44, 0, 0, 0, 0, 0, 0, 0}},
@@ -82,7 +82,7 @@ static instrument ins_bass = {
     0, // Delay amount
         0, // Overdrive amount
         // Patterns
-        {1,1,1,1,1,1,1,1,1,1}, // Pattern order
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}, // Pattern order
         // Columns
         {
                 {{0x24, 0, 0, 0, 0, 0, 0, 0, 0xA3, 0, 0, 0, 0, 0, 0, 0, 0x93, 0, 0, 0, 0, 0, 0, 0, 0x93, 0, 0, 0, 0, 0, 0, 0}}
@@ -91,7 +91,7 @@ static instrument ins_bass = {
 
 static instrument ins_pad = {
         // General
-        180, // Pan
+        230, // Pan
         // Oscillator 1
         -2, // Detune for octave
         0, // Detune for semitone
@@ -113,7 +113,7 @@ static instrument ins_pad = {
     0, // Delay amount
         0, // Overdrive amount
         // Patterns
-        {0,1,1,1,1,1,1,1,1,1}, // Pattern order
+        {0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1}, // Pattern order
         // Columns
         {
                 {{0x06, 0, 0x06, 0, 0x26, 0, 0x46, 0, 0x56, 0, 0, 0, 0x46, 0, 0x06, 0, 0x95, 0, 0, 0, 0, 0, 0x06, 0, 0x95, 0, 0, 0, 0x75, 0, 0, 0}}
@@ -131,7 +131,7 @@ static instrument ins_kick = {
         // Oscillator 2
         -2, // Detune for octave
         -8, // Detune for semitone
-        150, // Volume
+        100, // Volume
         SYNTH_OSC_SINE, // Wave form
         // LFO
         0, // LFO frequency
@@ -141,10 +141,10 @@ static instrument ins_kick = {
         3000, // Sustain
         200, // Release
         0, // Delay time
-    0, // Delay amount
-        3, // Overdrive amount
+                0, // Delay amount
+        0, // Overdrive amount
         // Patterns
-        {0,0,0,0,1,1,1,1,1,1}, // Pattern order
+        {0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0}, // Pattern order
         // Columns
         {
                 {{0x94, 0, 0, 0, 0, 0x94, 0, 0x94, 0x94, 0, 0, 0, 0x94, 0, 0, 0x94, 0x94, 0, 0, 0, 0, 0x94, 0, 0x94, 0x94, 0, 0, 0, 0x94, 0, 0, 0x94}},
@@ -157,7 +157,7 @@ static instrument ins_snare = {
         // Oscillator 1
         0, // Detune for octave
         0, // Detune for semitone
-        170, // Volume
+        150, // Volume
         SYNTH_OSC_NOISE, // Wave form
         // Oscillator 2
         0, // Detune for octave
@@ -175,7 +175,7 @@ static instrument ins_snare = {
     0, // Delay amount
         2, // Overdrive amount
         // Patterns
-        {1,1,0,0,0,0,1,1,1,1}, // Pattern order
+        {0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0}, // Pattern order
         // Columns
         {
                 {{0, 0, 0x94, 0, 0, 0, 0x94, 0, 0, 0, 0x94, 0, 0, 0, 0x94, 0, 0, 0, 0x94, 0, 0, 0, 0x94, 0, 0, 0, 0x94, 0, 0, 0, 0x94, 0}},
@@ -185,7 +185,7 @@ static instrument ins_snare = {
 static song songdata;
 
 #define SONG_BPM 50
-#define SONG_MASTER_VOLUME 100 // 0-255
+#define SONG_MASTER_VOLUME 160 // 0-255
 #define SONG_SAMPLES_PER_ROW	(SYNTH_SAMPLE_RATE*4*60 / (SONG_BPM*16))
 #define SONG_LENGTH_IN_SAMPLES (SYNTH_MAX_PATTERN_ORDER_COUNT * SYNTH_PATTERN_LENGTH * SYNTH_SAMPLE_RATE)
 

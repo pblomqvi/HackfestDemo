@@ -183,8 +183,9 @@ void DemoGLWidget::paintGL()
     if (synth_get_current_note_for_instrument(1) != 0 &&
         entity1 == 0)
     {
-        entity1 = new Entity(QPointF(300,200), 9, 4, 1);
+        entity1 = new Entity(QPointF(300,200), 8, 3, 1);
         entities.append(entity1);
+        entities.append(new Entity(QPointF(200,300), 8, 3, 1));
     }
 
     if (synth_get_current_note_for_instrument(2) != 0 &&
@@ -192,6 +193,7 @@ void DemoGLWidget::paintGL()
     {
         entity2 = new Entity(QPointF(300,200), 8, 3, 2);
         entities.append(entity2);
+        entities.append(new Entity(QPointF(200,300), 8, 3, 1));
     }
 
     if (synth_get_current_note_for_instrument(3) != 0 &&
