@@ -328,7 +328,16 @@ void DemoGLWidget::paintGL()
         painter.setFont(QFont("Comis Sans MS", 24));
         painter.drawText(230,290, "Vincit Hackfest 2010");
         //painter.drawText(30,460, QString("Loaded %1/%2").arg(loadedInstruments).arg(totalInstruments));
-        painter.drawText(30,460, QString("Loading..."));
+
+        if(waitForClick)
+        {
+            painter.drawText(30,460, QString("Press to start..."));
+        }
+        else
+        {
+            painter.drawText(30,460, QString("Loading..."));
+        }
+
 
         painter.restore();
 
