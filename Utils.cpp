@@ -4,6 +4,7 @@
 #include <QRadialGradient>
 #include <QBrush>
 #include <math.h>
+#include <QtOpenGL>
 
 QPainter* Utils::painter = 0;
 const qreal PI = 3.14159;
@@ -118,4 +119,40 @@ QVector2D Utils::AngleToVector(qreal angle)
 {
     qreal radAngle = angle / 180 * PI;
     return QVector2D(sin(radAngle), cos(radAngle));
+}
+
+void Utils::InitFBO(FBO *fbo)
+{
+        glGenFramebuffers(1, &(fbo->frame));
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo->frame);
+
+        glGenRenderbuffers(1, &(fbo->depth));
+        glBindRenderbuffer(GL_RENDERBUFFER, fbo->depth);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, fbo->width, fbo->height);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, fbo->depth);
+
+        printf("GL Error: %d\n", glGetError());
+
+        glGenTextures(1, &(fbo->texid));
+                printf("GL Error: %d\n", glGetError());
+        glBindTexture(GL_TEXTURE_2D, fbo->texid);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA4,  fbo->width, fbo->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+        printf("GL Error: %d\n", glGetError());
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fbo->texid, 0);
+
+
+        GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+        if (status != GL_FRAMEBUFFER_COMPLETE) {
+                printf("FBO Error: %d\n", status);
+                //exit(-1);
+        }
+}
+
+void Utils::DeleteFBO(FBO *fbo)
+{
+        glDeleteTextures(1, &(fbo->texid));;
+        glDeleteRenderbuffers(1, &(fbo->depth));
+        glDeleteFramebuffers(1, &(fbo->frame));
 }

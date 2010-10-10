@@ -15,7 +15,8 @@ SOURCES += main.cpp \
     Utils.cpp \
     critter.cpp \
     tail.cpp \
-    synth.c
+    synth.c \
+    particle.cpp
 SOURCES += mainwindow.cpp
 SOURCES += DemoGLWidget.cpp
 
@@ -26,7 +27,8 @@ HEADERS += Entity.h \
     tail.h \
     critter.h \
     synth.h \
-    song.h
+    song.h \
+    particle.h
 HEADERS += mainwindow.h
 
 QT += opengl

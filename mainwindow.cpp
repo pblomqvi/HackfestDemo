@@ -49,11 +49,7 @@
 #include <QTimer>
 
 #include "DemoGLWidget.h"
-
-extern "C"
-{
-    #include "synth.h"
-}
+#include "synth.h"
 
 MainWindow::MainWindow()
 {
@@ -66,6 +62,7 @@ MainWindow::MainWindow()
 
     setCentralWidget(glwidget);
 
+    // Play music
     //synth_init();
     //synth_play();
 

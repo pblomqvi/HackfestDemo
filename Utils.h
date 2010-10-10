@@ -5,6 +5,11 @@
 #include <QPainter>
 #include <QBrush>
 
+struct FBO {
+        unsigned int frame, depth, texid;
+        int width, height;
+};
+
 class Utils
 {
 public:
@@ -20,6 +25,9 @@ public:
                                             QColor inner, QColor outer,
                                             qreal phase);
 
+
+    static void InitFBO(FBO *fbo);
+    static void DeleteFBO(FBO *fbo);
 
     // Angle in degrees from positive Y-axis in range [-180, 180]
     static qreal VectorToAngle(QVector2D vec);
