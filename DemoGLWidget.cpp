@@ -39,6 +39,13 @@ DemoGLWidget::DemoGLWidget(QWidget *parent)
     frames = 0;
     randomTarget();
 
+    drawTitle = true;
+    titleFading = false;
+    titleOcapacity = 1.0;
+    loadedInstruments = 0;
+    totalInstruments = 8;
+    waitForClick = false;
+
     // Init FBO
     /*
     makeCurrent();
@@ -283,6 +290,41 @@ void DemoGLWidget::paintGL()
         painter.drawText(20, 40, framesPerSecond + " fps");
     }
 
+    if(drawTitle)
+    {
+        painter.save();
+
+        painter.setPen(Qt::magenta);
+        painter.setOpacity(titleOcapacity);
+
+        painter.setFont(QFont("Comic Sans MS", 64));
+
+        painter.setFont(QFont("arial", 72));
+        painter.setPen(Qt::gray);
+        painter.drawText(160,240, "theDepths");
+        painter.setPen(Qt::magenta);
+        painter.drawText(157,243, "theDepths");
+
+        painter.setFont(QFont("Comis Sans MS", 24));
+        painter.drawText(230,290, "Vincit Hackfest 2010");
+        //painter.drawText(30,460, QString("Loaded %1/%2").arg(loadedInstruments).arg(totalInstruments));
+        painter.drawText(30,460, QString("Loading..."));
+
+        painter.restore();
+
+        if(titleFading)
+        {
+            titleOcapacity -= TITLE_FADE_SPEED;
+            if(titleOcapacity < 0.0)
+            {
+                drawTitle = false;
+                // TODO: start playing music
+            }
+
+        }
+    }
+
+
     // Post processing
     /*
     int effectIndex = 3;
@@ -336,8 +378,11 @@ void DemoGLWidget::randomTarget()
 
 void DemoGLWidget::mouseMoveEvent (QMouseEvent* event)
 {
+    if(waitForClick) titleFading = true;
+
+    /*
     targetLocation = QPointF(event->x(), event->y());
     event->accept();
 
-    if (critter != 0) critter->setExpandingColor(Utils::randomColor());
+    if (critter != 0) critter->setExpandingColor(Utils::randomColor());*/
 }

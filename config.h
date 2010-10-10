@@ -4,7 +4,9 @@
 #include <qglobal.h>
 
 const bool DEBUG = false;
-const bool USE_SOUND = true;
+const bool USE_SOUND = false;
+
+const qreal TITLE_FADE_SPEED = 0.1;
 
 const int NUM_ENTITIES = 10;
 const qreal ENTITY_SPEED = 4.0;

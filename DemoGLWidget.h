@@ -84,5 +84,12 @@ private:
     Entity* entity2;
     Entity* entity3;
     Entity* entity4;
+
+    bool drawTitle;
+    bool titleFading;
+    bool waitForClick;
+    qreal titleOcapacity;
+    int loadedInstruments;
+    int totalInstruments;
 };
 #endif
