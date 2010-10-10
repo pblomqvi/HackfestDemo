@@ -7,6 +7,7 @@
 #include "Utils.h"
 #include "Entity.h"
 #include "critter.h"
+#include "particle.h"
 
 #define WIDTH 512
 #define HEIGHT 512
@@ -123,7 +124,8 @@ void DemoGLWidget::paintGL()
 
     painter.beginNativePainting();
 
-    glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
+
+    glClearColor(0.05f, 0.05f, 0.2f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
@@ -134,12 +136,19 @@ void DemoGLWidget::paintGL()
 
     painter.endNativePainting();
 
-    // Draw Entities and Critter
+    // Draw Entities and Critter    
+    painter.setBrush(QBrush());
+
     foreach (Entity *entity, entities)
     {
         entity->drawEntity(&painter);
     }
     critter->drawCritter(&painter);
+
+    foreach (Particle *particle, particles)
+    {
+        particle->draw(&painter);
+    }
 
     // Display FPS
     QString framesPerSecond;
@@ -211,6 +220,17 @@ void DemoGLWidget::createEntities(int number)
     }
 
     critter = new Critter(QPointF(500,200), 10, CRITTER_SPEED);
+
+
+    // Particles
+    for (int i = 0; i < 100; ++i) {
+        QPointF position(width()*(0.1 + (0.8*qrand()/(RAND_MAX+1.0))),
+                         height()*(0.1 + (0.8*qrand()/(RAND_MAX+1.0))));
+        qreal radius = qMin(7.0, 15 * qrand()/(RAND_MAX+1.0));
+        qreal velocity = 5 * qrand()/(RAND_MAX+1.0);
+
+        particles.append(new Particle(position, radius, velocity));
+    }
 }
 
 void DemoGLWidget::randomTarget()

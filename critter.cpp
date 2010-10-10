@@ -157,12 +157,13 @@ void Critter::setExpandingColor(QColor newColor)
 
 void Critter::updateColor()
 {
+    /*
     qreal pos = gradient.stops().at(2).first + CRITTER_GRADIENT_SPEED;
     if(pos < 1.0 && gradient.stops().size() == 3)
     {
         printf("*\n");
         gradient.stops().remove(2);
         gradient.setColorAt(pos, outerColor);
-
     }
+    */
 }

@@ -49,6 +49,7 @@
 class Entity;
 struct FBO;
 class Critter;
+class Particle;
 
 class DemoGLWidget : public QGLWidget {
 
@@ -66,7 +67,9 @@ private:
 
 
     QList<Entity*> entities;
+    QList<Particle*> particles;
     Critter* critter;
+    QImage backgroundImage;
 
     int frames;
     QTime time;
