@@ -27,7 +27,7 @@ GLfloat kernels[7][9] = {
 
 DemoGLWidget::DemoGLWidget(QWidget *parent)
     : QGLWidget(parent),
-    entity1(0), entity2(0), entity3(0), entity4(0)
+    entity1(0), entity2(0), entity3(0), entity4(0), critter(0)
 {
     setAttribute(Qt::WA_PaintOnScreen);
     setAttribute(Qt::WA_NoSystemBackground);
@@ -183,9 +183,9 @@ void DemoGLWidget::paintGL()
     if (synth_get_current_note_for_instrument(1) != 0 &&
         entity1 == 0)
     {
-        entity1 = new Entity(QPointF(300,200), 8, 3, 1);
+        entity1 = new Entity(QPointF(300,200), 6, 3, 1);
         entities.append(entity1);
-        entities.append(new Entity(QPointF(200,300), 8, 3, 1));
+        entities.append(new Entity(QPointF(200,300), 10, 3, 1));
     }
 
     if (synth_get_current_note_for_instrument(2) != 0 &&
@@ -193,7 +193,7 @@ void DemoGLWidget::paintGL()
     {
         entity2 = new Entity(QPointF(300,200), 8, 3, 2);
         entities.append(entity2);
-        entities.append(new Entity(QPointF(200,300), 8, 3, 1));
+        entities.append(new Entity(QPointF(200,400), 10, 3, 2));
     }
 
     if (synth_get_current_note_for_instrument(3) != 0 &&
@@ -201,6 +201,8 @@ void DemoGLWidget::paintGL()
     {
         entity3 = new Entity(QPointF(300,200), 8, 3, 3);
         entities.append(entity3);
+        entities.append(new Entity(QPointF(400,300), 12, 3, 3));
+        entities.append(new Entity(QPointF(100,100), 7, 3, 3));
     }
 
     if (synth_get_current_note_for_instrument(4) != 0 &&
@@ -208,6 +210,7 @@ void DemoGLWidget::paintGL()
     {
         entity4 = new Entity(QPointF(300,200), 8, 3, 4);
         entities.append(entity4);
+        entities.append(new Entity(QPointF(200,400), 12, 3, 4));
     }
 
 

@@ -16,8 +16,8 @@ Entity::Entity(const QPointF &position, qreal radius, qreal velocity, int synced
     prevSteeringVector = QVector2D();
     directionVector = QVector2D(0.0, 1.0); // Default direction is towards World Y
 
-    innerColor = Utils::randomColor();
-    outerColor = Utils::randomColor();
+    innerColor = QColor(40,40,90,20);
+    outerColor = QColor(0,200,200,20);
     cache = 0;
     updateBrush();
 }
@@ -182,7 +182,7 @@ void Entity::move()
     QVector2D newDirVec = directionVector + steeringVector * 0.1;
     newDirVec.normalize();
     float env = synth_get_current_envelope_for_instrument(syncedInstrumentIndex);
-    position += newDirVec.toPointF() * (vel + env);
+    position += newDirVec.toPointF() * (vel + env*radius*0.5f);
     directionVector = newDirVec;
     // Move tail as well
     tail.move(position);

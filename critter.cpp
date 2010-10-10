@@ -8,7 +8,7 @@
 #include <math.h>
 
 Critter::Critter(const QPointF &position, qreal radius, qreal velocity)
-    : position(position), vel(velocity), radius(radius), tails(), tentacleTarget()
+    : position(position), vel(velocity), radius(radius)
 {
     // Create tentacles with differing angles
     tails.append(Tentacle(position,    0, 5, 8.0 ,1.0));
