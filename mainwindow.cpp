@@ -65,13 +65,4 @@ MainWindow::MainWindow()
 
     QObject::connect(timer, SIGNAL(timeout()), glwidget, SLOT(updateGL()));
     timer->start();
-
-    // Play music
-    if(USE_SOUND)
-    {
-        qDebug("Rendering music...");
-        synth_init();
-        qDebug("Rendered");
-        synth_play();
-    }
 }
