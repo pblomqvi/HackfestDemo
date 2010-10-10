@@ -8,9 +8,9 @@
 #include <math.h>
 #include <QQuaternion>
 
-Entity::Entity(const QPointF &position, qreal radius, qreal velocity)
+Entity::Entity(const QPointF &position, qreal radius, qreal velocity, int syncedInstrument)
     : position(position), vel(velocity), radius(radius),
-    tail(position, 0, 7, radius / 1.2, 1.0)
+    tail(position, 0, 7, radius / 1.2, 1.0), syncedInstrumentIndex(syncedInstrument)
 {
     steeringVector = QVector2D();
     prevSteeringVector = QVector2D();
@@ -57,14 +57,17 @@ void Entity::updateBrush()
 
 void Entity::drawEntity(QPainter *painter)
 {
-    // Draw tail first
-    tail.drawTail(painter);
-
     painter->save();
-    painter->translate(position.x() - radius, position.y() - radius);
+
+    // Draw tail first
+    tail.drawTail(painter, &brush);
+
     //painter->setOpacity(0.8);
-    painter->setOpacity(synth_get_current_envelope_for_instrument(0));
+    painter->setOpacity(synth_get_current_envelope_for_instrument(syncedInstrumentIndex));
+
+    painter->translate(position.x() - radius, position.y() - radius);
     painter->drawImage(0, 0, *cache);
+
     painter->restore();
 }
 
@@ -91,7 +94,6 @@ void Entity::steerWithFlock(QMutableListIterator<Entity*> localFlock,
 {
     // Separation is sum of vectors from local flockmates to this, effect dimisishes with distance
     // Cohesion is vector towards center of flock
-
     QVector2D separationVector = QVector2D(); // For separation
     QPointF cohesionCenter = position; // For cohesion, start with self
     int flockCounter = 1; // 1 == self
@@ -178,7 +180,8 @@ void Entity::move()
 
     QVector2D newDirVec = directionVector + steeringVector * 0.1;
     newDirVec.normalize();
-    position += newDirVec.toPointF() * vel;
+    position += newDirVec.toPointF() * (vel +
+                synth_get_current_envelope_for_instrument(syncedInstrumentIndex*radius));
     directionVector = newDirVec;
     // Move tail as well
     tail.move(position);

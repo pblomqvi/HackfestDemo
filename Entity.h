@@ -17,7 +17,7 @@ class QPainter;
 class Entity
 {
 public:
-    Entity(const QPointF &position, qreal radius, const qreal velocity);
+    Entity(const QPointF &position, qreal radius, const qreal velocity, int syncedInstrument);
     ~Entity();
 
     void drawEntity(QPainter *painter);
@@ -46,6 +46,7 @@ private:
     QColor innerColor;
     QColor outerColor;
     QImage *cache;
+    int syncedInstrumentIndex;
 
     Tail tail;
 

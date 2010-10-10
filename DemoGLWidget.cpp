@@ -8,6 +8,7 @@
 #include "Entity.h"
 #include "critter.h"
 #include "particle.h"
+#include "synth.h"
 
 #define WIDTH 512
 #define HEIGHT 512
@@ -25,7 +26,8 @@ GLfloat kernels[7][9] = {
 
 
 DemoGLWidget::DemoGLWidget(QWidget *parent)
-    : QGLWidget(parent)
+    : QGLWidget(parent),
+    entity1(0), entity2(0), entity3(0), entity4(0)
 {
     setAttribute(Qt::WA_PaintOnScreen);
     setAttribute(Qt::WA_NoSystemBackground);
@@ -108,7 +110,17 @@ void DemoGLWidget::initializeGL ()
 {
     glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
 
-    createEntities(NUM_ENTITIES);
+    if(!USE_SOUND) createEntities(NUM_ENTITIES);
+
+    // Particles
+    for (int i = 0; i < 100; ++i) {
+        QPointF position(width()*(0.1 + (0.8*qrand()/(RAND_MAX+1.0))),
+                         height()*(0.1 + (0.8*qrand()/(RAND_MAX+1.0))));
+        qreal radius = qMin(7.0, 15 * qrand()/(RAND_MAX+1.0));
+        qreal velocity = 5 * qrand()/(RAND_MAX+1.0);
+
+        particles.append(new Particle(position, radius, velocity));
+    }
 }
 
 void DemoGLWidget::paintGL()
@@ -124,8 +136,21 @@ void DemoGLWidget::paintGL()
 
     painter.beginNativePainting();
 
+    float r = 0.05f;
+    float g = 0.05f;
+    float b = 0.2f;
 
-    glClearColor(0.05f, 0.05f, 0.2f, 1.0f);
+    // Flash screen on snare hit
+    float snareEnv = synth_get_current_envelope_for_instrument(4);
+
+    if (snareEnv > 0.001f)
+    {
+        r += snareEnv * 0.2f;
+        g += snareEnv * 0.2f;
+        b += snareEnv * 0.2f;
+    }
+
+    glClearColor(r, g, b, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
@@ -135,6 +160,43 @@ void DemoGLWidget::paintGL()
     glCullFace(GL_FRONT);
 
     painter.endNativePainting();
+
+
+    // Create entities when an instrument is first played
+    if (synth_get_current_note_for_instrument(0) != 0 &&
+        critter == 0)
+    {
+        critter = new Critter(QPointF(500,200), 10, CRITTER_SPEED);
+    }
+
+    if (synth_get_current_note_for_instrument(1) != 0 &&
+        entity1 == 0)
+    {
+        entity1 = new Entity(QPointF(300,200), 9, 4, 1);
+        entities.append(entity1);
+    }
+
+    if (synth_get_current_note_for_instrument(2) != 0 &&
+        entity2 == 0)
+    {
+        entity2 = new Entity(QPointF(300,200), 8, 3, 2);
+        entities.append(entity2);
+    }
+
+    if (synth_get_current_note_for_instrument(3) != 0 &&
+        entity3 == 0)
+    {
+        entity3 = new Entity(QPointF(300,200), 8, 3, 3);
+        entities.append(entity3);
+    }
+
+    if (synth_get_current_note_for_instrument(4) != 0 &&
+        entity4 == 0)
+    {
+        entity4 = new Entity(QPointF(300,200), 8, 3, 4);
+        entities.append(entity4);
+    }
+
 
     // Draw Entities and Critter    
     painter.setBrush(QBrush());
@@ -217,21 +279,10 @@ void DemoGLWidget::createEntities(int number)
         qreal radius = qMin(width(), height())*(0.0175 + 0.0875*qrand()/(RAND_MAX+1.0));
         qreal velocity = ENTITY_SPEED;
 
-        entities.append(new Entity(position, radius, velocity));
-    }
+        entities.append(new Entity(position, radius, velocity, 0));
+    }    
 
     critter = new Critter(QPointF(500,200), 10, CRITTER_SPEED);
-
-
-    // Particles
-    for (int i = 0; i < 100; ++i) {
-        QPointF position(width()*(0.1 + (0.8*qrand()/(RAND_MAX+1.0))),
-                         height()*(0.1 + (0.8*qrand()/(RAND_MAX+1.0))));
-        qreal radius = qMin(7.0, 15 * qrand()/(RAND_MAX+1.0));
-        qreal velocity = 5 * qrand()/(RAND_MAX+1.0);
-
-        particles.append(new Particle(position, radius, velocity));
-    }
 }
 
 void DemoGLWidget::randomTarget()

@@ -87,7 +87,8 @@ void synth_init();
 void synth_play();
 
 unsigned char synth_get_current_note_for_instrument(int instrument);
-unsigned char synth_get_current_envelope_for_instrument(int instrument);
+unsigned char synth_get_current_envelope_value_for_instrument(int instrument);
+float synth_get_current_envelope_for_instrument(int instrument);
 
 #ifdef __cplusplus
 } /* closing brace for extern "C" */
