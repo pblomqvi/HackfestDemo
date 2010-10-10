@@ -9,7 +9,7 @@ Particle::Particle(const QPointF &position, qreal radius)
 
 void Particle::draw(QPainter *painter, QPointF velocity)
 {
-    position += velocity;
+    position += velocity * (rand()%2);
 
     painter->save();
     QPen pen(Qt::NoPen);
