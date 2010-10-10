@@ -61,6 +61,10 @@ protected:
     void paintGL ();
     void initializeGL ();
     void mouseMoveEvent (QMouseEvent* event);
+
+public:
+    void loadReady();
+
 private:
     void createEntities(int number);
     void randomTarget();

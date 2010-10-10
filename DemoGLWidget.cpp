@@ -9,6 +9,8 @@
 #include "critter.h"
 #include "particle.h"
 #include "synth.h"
+#include "SynthLoaderThread.h"
+
 
 #define WIDTH 512
 #define HEIGHT 512
@@ -100,10 +102,28 @@ DemoGLWidget::DemoGLWidget(QWidget *parent)
     program.addShader(fshader2);
     program.link();
     */
+
+    // Play music
+    if(USE_SOUND)
+    {
+        //qDebug("Rendering music...");
+        //synth_init();
+        //qDebug("Rendered");
+        //synth_play();
+        SynthLoadThread* loader = new SynthLoadThread();
+        loader->start(QThread::HighestPriority);
+        connect(loader, SIGNAL(finished()), this, SLOT(loadReady()));
+    }
 }
 
 DemoGLWidget::~DemoGLWidget()
 {
+}
+
+void DemoGLWidget::loadReady()
+{
+    qDebug("Playing music");
+    synth_play();
 }
 
 void DemoGLWidget::initializeGL ()
