@@ -4,7 +4,7 @@
 #include <qglobal.h>
 
 const bool DEBUG = false;
-const bool USE_SOUND = false;
+const bool USE_SOUND = true;
 
 const qreal TITLE_FADE_SPEED = 0.1;
 

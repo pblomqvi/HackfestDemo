@@ -62,7 +62,7 @@ protected:
     void initializeGL ();
     void mouseMoveEvent (QMouseEvent* event);
 
-public:
+public slots:
     void loadReady();
 
 private:
