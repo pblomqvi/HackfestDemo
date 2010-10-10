@@ -114,10 +114,10 @@ void DemoGLWidget::initializeGL ()
 
     // Particles
     for (int i = 0; i < 100; ++i) {
-        QPointF position(width()*(0.1 + (0.8*qrand()/(RAND_MAX+1.0))),
-                         height()*(0.1 + (0.8*qrand()/(RAND_MAX+1.0))));
+        QPointF position(width()*((qrand()/(RAND_MAX+1.0))),
+                         height()*((qrand()/(RAND_MAX+1.0))));
         qreal radius = qMin(7.0, 15 * qrand()/(RAND_MAX+1.0));
-        qreal velocity = 5 * qrand()/(RAND_MAX+1.0);
+        qreal velocity = qMin(5.0, 7 * qrand()/(RAND_MAX+1.0));
 
         particles.append(new Particle(position, radius, velocity));
     }
