@@ -102,10 +102,12 @@ void synth_render()
 #endif
 
 	// Clear buffers
+        /*
 	unsigned int pos = SONG_LENGTH_IN_SAMPLES;
     do {
 		leftBuffer[pos] = rightBuffer[pos] = 0;
 	} while(--pos);
+        */
 
 	/*
 	pos = SONG_LENGTH_IN_SAMPLES * SYNTH_MAX_INSTRUMENT_COUNT;
@@ -308,10 +310,15 @@ void synth_play()
 
 unsigned char synth_get_current_note_for_instrument(int instrument)
 {
-	return noteBuffer[bufferPosition + SONG_LENGTH_IN_SAMPLES * instrument];
+        return noteBuffer[bufferPosition + SONG_LENGTH_IN_SAMPLES * instrument];
 }
 
-unsigned char synth_get_current_envelope_for_instrument(int instrument)
+unsigned char synth_get_current_envelope_value_for_instrument(int instrument)
 {
 	return envelopeBuffer[bufferPosition + SONG_LENGTH_IN_SAMPLES * instrument];
+}
+
+float synth_get_current_envelope_for_instrument(int instrument)
+{
+        return envelopeBuffer[bufferPosition + SONG_LENGTH_IN_SAMPLES * instrument] / 255.0f;
 }

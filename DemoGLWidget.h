@@ -79,5 +79,10 @@ private:
     QGLShaderProgram program;
     QGLFramebufferObject *render_fbo;
     QGLFramebufferObject *texture_fbo;
+
+    Entity* entity1;
+    Entity* entity2;
+    Entity* entity3;
+    Entity* entity4;
 };
 #endif

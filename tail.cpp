@@ -75,7 +75,6 @@ void Tail::TailSegment::drawSegment(QPainter* painter, QBrush* brush)
     {
         Utils::DrawCircle(pos, radius);
     }
-
 }
 
 void Tail::TailSegment::moveSegment()

@@ -1,6 +1,7 @@
 #include "critter.h"
 #include "config.h"
 #include "Utils.h"
+#include "synth.h"
 
 #include <QPainter>
 #include <QPen>
@@ -70,15 +71,21 @@ void Critter::updateBrush()
 
 void Critter::drawCritter(QPainter *painter)
 {
+    painter->save();
+
+    float opacity = synth_get_current_envelope_for_instrument(0);
+
+    if (opacity < 0.1f) opacity = 0.1f;
+    painter->setOpacity(opacity);
+
     // Draw tail first
     for(int i = 0; i < tails.size(); i++)
     {
         tails[i].drawTail(painter, &gradientBrush);
     }
 
-    painter->save();
     painter->translate(position.x() - radius, position.y() - radius);
-    painter->setOpacity(0.8);
+
     painter->drawImage(0, 0, *cache);
     painter->restore();
 }
@@ -145,6 +152,10 @@ void Critter::setExpandingColor(QColor newColor)
 
 void Critter::updateColor()
 {
+    /*
     radiantPos += CRITTER_GRADIENT_SPEED;
     if(radiantPos > 0.99) radiantPos = 0.99;
+    */
+
+    radiantPos = synth_get_current_envelope_for_instrument(0);
 }

@@ -29,16 +29,16 @@ extern "C" {
 
 static instrument ins_lead = {
         // General
-        128, // Pan
+        75, // Pan
         // Oscillator 1
         0, // Detune for octave
         0, // Detune for semitone
-        100, // Volume
+        40, // Volume
         SYNTH_OSC_TRIANGLE, // Wave form
         // Oscillator 2
         0, // Detune for octave
         0, // Detune for semitone
-        40, // Volume
+        30, // Volume
         SYNTH_OSC_SQUARE, // Wave form
         // LFO
         1, // LFO frequency
@@ -69,7 +69,7 @@ static instrument ins_bass = {
         // Oscillator 2
         -2, // Detune for octave
         0, // Detune for semitone
-        50, // Volume
+        30, // Volume
         SYNTH_OSC_SAW, // Wave form
         // LFO
         0.1, // LFO frequency
@@ -91,16 +91,16 @@ static instrument ins_bass = {
 
 static instrument ins_pad = {
         // General
-        128, // Pan
+        180, // Pan
         // Oscillator 1
         -2, // Detune for octave
         0, // Detune for semitone
-        100, // Volume
+        170, // Volume
         SYNTH_OSC_SINE, // Wave form
         // Oscillator 2
         -2, // Detune for octave
         0, // Detune for semitone
-        50, // Volume
+        100, // Volume
         SYNTH_OSC_SINE, // Wave form
         // LFO
         0.1, // LFO frequency
@@ -157,7 +157,7 @@ static instrument ins_snare = {
         // Oscillator 1
         0, // Detune for octave
         0, // Detune for semitone
-        190, // Volume
+        170, // Volume
         SYNTH_OSC_NOISE, // Wave form
         // Oscillator 2
         0, // Detune for octave
@@ -169,13 +169,13 @@ static instrument ins_snare = {
         0, // LFO amount
         // Envelope
         100, // Attack
-        2000, // Sustain
+        3000, // Sustain
         4000, // Release
         0, // Delay time
     0, // Delay amount
         2, // Overdrive amount
         // Patterns
-        {0,0,0,0,0,0,1,1,1,1}, // Pattern order
+        {1,1,0,0,0,0,1,1,1,1}, // Pattern order
         // Columns
         {
                 {{0, 0, 0x94, 0, 0, 0, 0x94, 0, 0, 0, 0x94, 0, 0, 0, 0x94, 0, 0, 0, 0x94, 0, 0, 0, 0x94, 0, 0, 0, 0x94, 0, 0, 0, 0x94, 0}},
@@ -183,7 +183,6 @@ static instrument ins_snare = {
 };
 
 static song songdata;
-
 
 #define SONG_BPM 50
 #define SONG_MASTER_VOLUME 100 // 0-255
