@@ -2,7 +2,7 @@
 
 void SynthLoadThread::run()
 {
-    qDebug("Rendering music to buffer");
+    qDebug("SynthLoadThread: Rendering music to buffer");
     synth_init();
 
     emit ready();

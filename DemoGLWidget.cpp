@@ -129,7 +129,6 @@ DemoGLWidget::~DemoGLWidget()
 
 void DemoGLWidget::loadReady()
 {
-    qDebug("Playing music");
     waitForClick = true;
 }
 
@@ -327,7 +326,8 @@ void DemoGLWidget::paintGL()
 
         painter.setFont(QFont("Comis Sans MS", 24));
         painter.drawText(230,290, "Vincit Hackfest 2010");
-        //painter.drawText(30,460, QString("Loaded %1/%2").arg(loadedInstruments).arg(totalInstruments));
+        painter.setFont(QFont("Comis Sans MS", 20));
+        painter.drawText(290,320, "Tumppi & Pate");
 
         if(waitForClick)
         {
@@ -348,7 +348,6 @@ void DemoGLWidget::paintGL()
             {
                 drawTitle = false;
                 // start playing music
-                synth_play();
             }
 
         }
@@ -408,7 +407,18 @@ void DemoGLWidget::randomTarget()
 
 void DemoGLWidget::mouseMoveEvent (QMouseEvent* event)
 {
-    if(waitForClick) titleFading = true;
+    static bool musicNotPlaying = true;
+    if(waitForClick)
+    {
+        titleFading = true;
+        if(musicNotPlaying)
+        {
+            qDebug("Playing music");
+            synth_play();
+            musicNotPlaying = false;
+        }
+    }
+    event->accept();
 
     /*
     targetLocation = QPointF(event->x(), event->y());
