@@ -46,7 +46,7 @@ DemoGLWidget::DemoGLWidget(QWidget *parent)
     titleOcapacity = 1.0;
     loadedInstruments = 0;
     totalInstruments = 8;
-    waitForClick = false;
+	waitForClick = false;
 
     // Init FBO
     /*
@@ -113,13 +113,13 @@ DemoGLWidget::DemoGLWidget(QWidget *parent)
     // Play music
     if(USE_SOUND)
     {
-        //qDebug("Rendering music...");
-        //synth_init();
-        //qDebug("Rendered");
+		//qDebug("Rendering music...");
+		//synth_init();
+		//qDebug("Rendered");
         //synth_play();
-        SynthLoadThread* loader = new SynthLoadThread();
-        loader->start(QThread::HighestPriority);
-        connect(loader, SIGNAL(finished()), this, SLOT(loadReady()));
+		loader = new SynthLoadThread();
+		loader->start(QThread::HighestPriority);
+		connect(loader, SIGNAL(finished()), this, SLOT(loadReady()));
     }
 }
 
@@ -129,7 +129,9 @@ DemoGLWidget::~DemoGLWidget()
 
 void DemoGLWidget::loadReady()
 {
-    waitForClick = true;
+	qDebug("Load ready received");
+	//waitForClick = true;
+	titleFading = true;
 }
 
 void DemoGLWidget::initializeGL ()
@@ -329,6 +331,26 @@ void DemoGLWidget::paintGL()
         painter.setFont(QFont("Comis Sans MS", 20));
         painter.drawText(290,320, "Tumppi & Pate");
 
+		static float loadingTextOcapacity = titleOcapacity;
+		static float loadingTextFading = true;
+		painter.setOpacity(loadingTextOcapacity);
+
+		if(loadingTextFading)
+		{
+			loadingTextOcapacity -= LOADING_TEXT_CHANGE_SPEED;
+			if(loadingTextOcapacity <= LOADING_TEXT_LOWEST_OCAPACITY)
+			{
+				loadingTextFading = false;
+			}
+		}
+		else
+		{
+			loadingTextOcapacity += LOADING_TEXT_CHANGE_SPEED;
+			if(loadingTextOcapacity >= titleOcapacity)
+			{
+				loadingTextFading = true;
+			}
+		}
         if(waitForClick)
         {
             painter.drawText(30,460, QString("Press to start..."));
@@ -337,6 +359,9 @@ void DemoGLWidget::paintGL()
         {
             painter.drawText(30,460, QString("Loading..."));
         }
+
+
+		painter.setOpacity(titleOcapacity);
 
 
         painter.restore();
@@ -410,11 +435,12 @@ void DemoGLWidget::mouseMoveEvent (QMouseEvent* event)
     static bool musicNotPlaying = true;
     if(waitForClick)
     {
+		qDebug("Fade title");
         titleFading = true;
         if(musicNotPlaying)
         {
             qDebug("Playing music");
-            synth_play();
+			loader->startMusic();
             musicNotPlaying = false;
         }
     }

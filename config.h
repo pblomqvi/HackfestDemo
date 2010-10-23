@@ -6,6 +6,9 @@
 const bool DEBUG = false;
 const bool USE_SOUND = true;
 
+const float LOADING_TEXT_CHANGE_SPEED = 0.05;
+const float LOADING_TEXT_LOWEST_OCAPACITY = 0.2;
+
 const qreal TITLE_FADE_SPEED = 0.1;
 
 const int NUM_ENTITIES = 10;

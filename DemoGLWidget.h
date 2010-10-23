@@ -45,6 +45,7 @@
 #include <QTime>
 #include <QMouseEvent>
 #include <QtOpenGL>
+#include "SynthLoaderThread.h"
 
 class Entity;
 struct FBO;
@@ -69,6 +70,7 @@ private:
     void createEntities(int number);
     void randomTarget();
 
+	SynthLoadThread* loader;
 
     QList<Entity*> entities;
     QList<Particle*> particles;

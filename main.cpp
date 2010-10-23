@@ -49,7 +49,7 @@ int main( int argc, char ** argv )
 {
     QApplication a( argc, argv );
     MainWindow mw;
-    //mw.showFullScreen();
-    mw.showMaximized();
+	mw.showFullScreen();
+	//mw.showMaximized();
     return a.exec();
 }
